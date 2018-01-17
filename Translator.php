@@ -1,0 +1,58 @@
+<?php
+namespace BulkGate\Extensions;
+
+/**
+ * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
+class Translator extends SmartObject
+{
+    /** @var ISettings */
+    private $settings;
+
+    /** @var string|null|bool */
+    private $iso = null;
+
+    /** @var array */
+    private $translates = array();
+
+    public function __construct(ISettings $settings)
+    {
+        $this->settings = $settings;
+    }
+
+    public function init()
+    {
+        $this->iso = $this->settings->load('main:language');
+
+        if($this->iso)
+        {
+            $translates = $this->settings->load('global:translates-'.$this->iso);
+
+            if($translates && is_array($translates))
+            {
+                $this->translates = $translates;
+            }
+        }
+    }
+
+    public function translate($key, $default = null)
+    {
+        if($this->iso === null)
+        {
+            $this->init();
+        }
+
+        if(isset($this->translates[$key]))
+        {
+            return $this->translates[$key];
+        }
+
+        if($default === null)
+        {
+            return ucfirst(str_replace('_', ' ', $key));
+        }
+
+        return $default;
+    }
+}
