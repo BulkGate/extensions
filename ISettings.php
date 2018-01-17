@@ -15,4 +15,6 @@ interface ISettings
 
     /** @return array */
     public function synchronize();
+
+    public function install();
 }

@@ -141,6 +141,24 @@ class Settings extends SmartObject implements ISettings
         return $output;
     }
 
+    public function install()
+    {
+        $this->db->execute("DROP TABLE IF EXISTS `".$this->db->prefix()."bulkgate_module`");
+
+        $this->db->execute("
+            CREATE TABLE `".$this->db->prefix()."bulkgate_module` (
+            `scope` varchar(50) NOT NULL DEFAULT 'main',
+            `key` varchar(50) NOT NULL,
+            `type` enum('text','int','float','bool','json') DEFAULT 'text',
+            `value` text NOT NULL,
+            
+            `datetime` datetime DEFAULT NULL,
+            `order` int(11) NOT NULL DEFAULT '0',
+            PRIMARY KEY (`scope`,`key`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ");
+    }
+
     private function parseMeta(array $meta)
     {
         $output = array();
@@ -165,66 +183,6 @@ class Settings extends SmartObject implements ISettings
         }
         return count($output) > 0 ? ','.implode(',', $output) : '';
     }
-
-    /*private function parseMeta1($meta)
-    {
-        $cols = array(); $values = array();
-
-        if(is_array($meta))
-        {
-            foreach ($meta as $key => $item)
-            {
-                switch ($key)
-                {
-                    case 'type':
-                        $cols[] = '`type`';
-                        $values[] = '"'.$this->db->escape($this->checkType($item)).'"';
-                    break;
-                    case 'datetime':
-                        $cols[] = '`datetime`';
-                        $values[] = '"'.$this->db->escape($this->formatDate($item)).'"';
-                    break;
-                    case 'order':
-                        $cols[] = '`order`';
-                        $values[] = '"'.$this->db->escape((int) $item).'"';
-                    break;
-                    case 'synchronize_flag':
-                        $cols[] = '`synchronize_flag`';
-                        $values[] = '"'.$this->db->escape($this->checkFlag($item)).'"';
-                    break;
-                }
-            }
-        }
-        return array(count($cols) > 0 ? ','.implode(',', $cols) : '', count($values) > 0 ? ','.implode(',', $values) : '');
-    }*/
-
-    /*private function encodeValue($value, $type = "text")
-    {
-        switch ($type)
-        {
-            case 'int':
-            case 'bool':
-                return (int) $value;
-            break;
-            case 'float':
-                return (float) $value;
-            break;
-            case 'json':
-                try
-                {
-                    return Json::encode($value);
-                }
-                catch (JsonException $e)
-                {
-                    return '';
-                }
-            break;
-            case 'text':
-            default:
-                return (string) $value;
-            break;
-        }
-    }*/
 
     private function formatDate($date)
     {
