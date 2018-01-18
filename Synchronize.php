@@ -47,32 +47,38 @@ class Synchronize extends SmartObject
         {
             $module_settings = $this->settings->synchronize();
             $server_settings = call_user_func($callback, $module_settings);
-
-            if ($server_settings instanceof Response)
+            if($server_settings->exception)
             {
-                foreach ($server_settings->get(':synchronize:') as $server_setting)
+                return false;
+            }
+            else
+            {
+                if ($server_settings instanceof Response)
                 {
-                    $key = $this->getKey($server_setting->scope, $server_setting->key);
-
-                    if (isset($module_settings[$key]))
+                    foreach ($server_settings->get(':synchronize:') as $server_setting)
                     {
-                        $server_setting->datetime = isset($server_setting->datetime) ? (int)$server_setting->datetime : 0;
-                        $module_settings[$key]->datetime = isset($module_settings[$key]->datetime) ? (int)$module_settings[$key]->datetime : 0;
+                        $key = $this->getKey($server_setting->scope, $server_setting->key);
 
-                        if ($server_setting->datetime >= $module_settings[$key]->datetime)
+                        if (isset($module_settings[$key]))
                         {
-                            $this->settings->set($key, $server_setting->value, array('type' => isset($server_setting->type) ? $server_setting->type : 'text', 'datetime' => $server_setting->datetime, 'synchronize_flag' => $server_setting->synchronize_flag, 'order' => isset($server_setting->order) ? $server_setting->order : 0,));
+                            $server_setting->datetime = isset($server_setting->datetime) ? (int)$server_setting->datetime : 0;
+                            $module_settings[$key]->datetime = isset($module_settings[$key]->datetime) ? (int)$module_settings[$key]->datetime : 0;
+
+                            if ($server_setting->datetime >= $module_settings[$key]->datetime)
+                            {
+                                $this->settings->set($key, $server_setting->value, array('type' => isset($server_setting->type) ? $server_setting->type : 'text', 'datetime' => $server_setting->datetime, 'synchronize_flag' => $server_setting->synchronize_flag, 'order' => isset($server_setting->order) ? $server_setting->order : 0,));
+                            }
+                        }
+                        else
+                        {
+                            $this->settings->set($key, $server_setting->value, array('type' => isset($server_setting->type) ? $server_setting->type : 'text', 'datetime' => isset($server_setting->datetime) ? $server_setting->datetime : 0, 'order' => isset($server_setting->order) ? $server_setting->order : 0, 'synchronize_flag' => isset($server_setting->synchronize_flag) ? $server_setting->synchronize_flag : 'none'));
                         }
                     }
-                    else
-                    {
-                        $this->settings->set($key, $server_setting->value, array('type' => isset($server_setting->type) ? $server_setting->type : 'text', 'datetime' => isset($server_setting->datetime) ? $server_setting->datetime : 0, 'order' => isset($server_setting->order) ? $server_setting->order : 0, 'synchronize_flag' => isset($server_setting->synchronize_flag) ? $server_setting->synchronize_flag : 'none'));
-                    }
+
+                    $this->settings->delete();
+
+                    $this->settings->set('static:synchronize', time() + $this->settings->load('main:synchronize_interval', 21600 /* 6 hours */));
                 }
-
-                $this->settings->delete();
-
-                $this->settings->set('static:synchronize', time() + $this->settings->load('main:synchronize_interval', 21600 /* 6 hours */));
             }
             $server_settings->remove(':synchronize:');
 
