@@ -143,10 +143,8 @@ class Settings extends SmartObject implements ISettings
 
     public function install()
     {
-        $this->db->execute("DROP TABLE IF EXISTS `".$this->db->prefix()."bulkgate_module`");
-
         $this->db->execute("
-            CREATE TABLE `".$this->db->prefix()."bulkgate_module` (
+            CREATE TABLE IF NOT EXISTS `".$this->db->prefix()."bulkgate_module` (
             `scope` varchar(50) NOT NULL DEFAULT 'main',
             `key` varchar(50) NOT NULL,
             `type` enum('text','int','float','bool','json') DEFAULT 'text',
@@ -157,6 +155,14 @@ class Settings extends SmartObject implements ISettings
             PRIMARY KEY (`scope`,`key`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ");
+    }
+
+    public function uninstall()
+    {
+        if ($this->load('main:delete_db', false))
+        {
+            $this->db->execute("DROP TABLE IF EXISTS `" . $this->db->prefix() . "bulkgate_module`");
+        }
     }
 
     private function parseMeta(array $meta)
