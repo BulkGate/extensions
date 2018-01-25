@@ -27,4 +27,10 @@ interface IModule
 
     /** @return string */
     public function url();
+
+    /**
+     * @param string|null $key
+     * @return string|array
+     */
+    public function info($key = null);
 }
