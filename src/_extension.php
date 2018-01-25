@@ -21,6 +21,7 @@ require_once __DIR__.'/ISettings.php';
 require_once __DIR__.'/Settings.php';
 require_once __DIR__.'/Synchronize.php';
 require_once __DIR__.'/Headers.php';
+require_once __DIR__.'/ProxyActions.php';
 
 require_once __DIR__.'/Hook/Channel/IChannel.php';
 require_once __DIR__.'/Hook/Channel/DefaultChannel.php';

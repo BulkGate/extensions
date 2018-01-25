@@ -1,16 +1,13 @@
 <?php
 namespace BulkGate\Extensions;
 
-use BulkGate\Extensions\IO\Request;
-use BulkGate\Extensions\IO\IConnection;
-
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
 class ProxyActions extends SmartObject
 {
-    /** @var IConnection */
+    /** @var IO\IConnection */
     private $connection;
 
     /** @var IModule */
@@ -25,7 +22,7 @@ class ProxyActions extends SmartObject
     /** @var Translator */
     private $translator;
 
-    public function __construct(IConnection $connection, IModule $module, Synchronize $synchronize, ISettings $settings, Translator $translator)
+    public function __construct(IO\IConnection $connection, IModule $module, Synchronize $synchronize, ISettings $settings, Translator $translator)
     {
         $this->connection = $connection;
         $this->module = $module;
@@ -35,7 +32,7 @@ class ProxyActions extends SmartObject
 
     public function login(array $data)
     {
-        $response = $this->connection->run(new Request($this->module->getUrl('/module/sign/in'), $data));
+        $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sign/in'), $data));
 
         $login = (array) $response->get('::login');
 
@@ -55,7 +52,7 @@ class ProxyActions extends SmartObject
 
     public function register(array $data)
     {
-        $response = $this->connection->run(new Request($this->module->getUrl('/module/sign/up'), $data));
+        $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sign/up'), $data));
 
         $register = (array) $response->get('::register');
 
@@ -70,7 +67,7 @@ class ProxyActions extends SmartObject
 
     public function authenticate()
     {
-        return $this->connection->run(new Request($this->module->getUrl('/widget/authenticate')));
+        return $this->connection->run(new IO\Request($this->module->getUrl('/widget/authenticate')));
     }
 
     public function saveSettings(array $settings)
@@ -92,7 +89,7 @@ class ProxyActions extends SmartObject
 
         return $this->synchronize->synchronize(function($module_settings) use ($self, $data)
         {
-            return $self->connection->run(new Request($self->module->getUrl('/module/hook/customer'),
+            return $self->connection->run(new IO\Request($self->module->getUrl('/module/hook/customer'),
                 array("__synchronize" => $module_settings) + $data,
                 true
             ));
@@ -105,7 +102,7 @@ class ProxyActions extends SmartObject
 
         return $this->synchronize->synchronize(function($module_settings) use ($self, $data)
         {
-            return $self->connection->run(new Request($self->module->getUrl('/module/hook/admin'),
+            return $self->connection->run(new IO\Request($self->module->getUrl('/module/hook/admin'),
                 array("__synchronize" => $module_settings) + $data,
                 true
             ));
