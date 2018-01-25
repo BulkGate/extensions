@@ -31,11 +31,11 @@ class ConnectionFactory extends BulkGate\Extensions\SmartObject
         {
             if(extension_loaded('curl'))
             {
-                $this->io = new cUrl($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product);
+                $this->io = new cUrl($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product, $this->settings->load('main:language', 'en'));
             }
             else
             {
-                $this->io = new FSock($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product);
+                $this->io = new FSock($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product, $this->settings->load('main:language', 'en'));
             }
         }
         return $this->io;

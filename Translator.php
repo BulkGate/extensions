@@ -23,8 +23,7 @@ class Translator extends SmartObject
 
     public function init()
     {
-        $this->iso = isset($_COOKIE['language_iso']) ? $_COOKIE['language_iso'] : 'en';
-        setcookie('language_iso', $this->iso, 0, '/');
+        $this->iso = $this->settings->load('main:language', 'en');
 
         if($this->iso)
         {
@@ -35,6 +34,11 @@ class Translator extends SmartObject
                 $this->translates = $translates;
             }
         }
+    }
+
+    public function setLanguage($iso)
+    {
+        $this->settings->set('main:language', $iso, array('type' => 'string'));
     }
 
     public function translate($key, $default = null)
