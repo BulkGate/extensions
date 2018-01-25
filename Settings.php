@@ -83,14 +83,14 @@ class Settings extends SmartObject implements ISettings
         }
     }
 
-    public function set($key, $value, array $meta = array())
+    public function set($settings_key, $value, array $meta = array())
     {
         if(!isset($meta['datetime']))
         {
             $meta['datetime'] = time();
         }
 
-        list($scope, $key) = BulkGate\Extensions\Key::decode($key);
+        list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
 
         $result = $this->db->execute('SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = "'.$this->db->escape($scope).'" AND `key` = "'.$this->db->escape($key).'"');
 
@@ -109,9 +109,9 @@ class Settings extends SmartObject implements ISettings
         }
     }
 
-    public function delete($key = null)
+    public function delete($settings_key = null)
     {
-        if($key === null)
+        if($settings_key === null)
         {
             $this->db->execute('
                         DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `synchronize_flag` = "delete"
@@ -119,7 +119,7 @@ class Settings extends SmartObject implements ISettings
         }
         else
         {
-            list($scope, $key) = BulkGate\Extensions\Key::decode($key);
+            list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
 
             $this->db->execute('
                         DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = "'.$this->db->escape($scope).'" AND `key` = "'.$this->db->escape($key).'"
