@@ -16,5 +16,5 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost')
         Tracy\Debugger::enable();
     }
 
-    define('BULKGATE_DEBUG', 'http://localhost/bulkgate');
+    //define('BULKGATE_DEBUG', 'http://localhost/bulkgate');
 }
