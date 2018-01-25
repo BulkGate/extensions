@@ -9,5 +9,8 @@ use BulkGate;
  */
 interface IResponse
 {
+    /**
+     * @return void
+     */
     public function send();
 }

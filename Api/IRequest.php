@@ -9,6 +9,8 @@ use BulkGate;
  */
 interface IRequest
 {
-    /** @return BulkGate\Extensions\Headers */
+    /**
+     * @return BulkGate\Extensions\Headers
+     */
     public function getHeaders();
 }

@@ -7,4 +7,15 @@ namespace BulkGate\Extensions;
  */
 interface ICustomers
 {
+    /**
+     * @param array $filter
+     * @return array
+     */
+    public function loadCount(array $filter = array());
+
+    /**
+     * @param array $filter
+     * @return array
+     */
+    public function load(array $filter = array());
 }

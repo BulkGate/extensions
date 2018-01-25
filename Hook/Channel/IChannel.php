@@ -7,7 +7,13 @@ namespace BulkGate\Extensions\Hook\Channel;
  */
 interface IChannel
 {
+    /**
+     * @return bool
+     */
     public function isActive();
 
+    /**
+     * @return array
+     */
     public function toArray();
 }

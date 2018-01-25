@@ -10,5 +10,10 @@ use BulkGate\Extensions\Database;
  */
 interface IExtension
 {
+    /**
+     * @param Database\IDatabase $database
+     * @param Variables $variables
+     * @return void
+     */
     public function extend(Database\IDatabase $database, Hook\Variables $variables);
 }
