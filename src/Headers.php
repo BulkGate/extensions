@@ -1,5 +1,4 @@
 <?php
-
 namespace BulkGate\Extensions;
 
 use BulkGate;

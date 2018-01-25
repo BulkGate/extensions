@@ -24,7 +24,7 @@ abstract class Api extends Extensions\SmartObject
 
         if(method_exists($this, $method))
         {
-            call_user_func_array(array($this, $method), [$data]);
+            call_user_func_array(array($this, $method), array($data));
         }
         else
         {

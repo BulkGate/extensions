@@ -1,11 +1,13 @@
 <?php
 namespace BulkGate\Extensions\Hook;
 
+use BulkGate\Extensions\SmartObject;
+
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Variables
+class Variables extends SmartObject
 {
     /** @var array */
     private $variables = array();

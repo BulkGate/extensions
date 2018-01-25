@@ -77,9 +77,7 @@ class cUrl extends BulkGate\Extensions\SmartObject implements IConnection
         $request = curl_exec($curl);
         $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $header = new HttpHeaders(substr($request, 0, $header_size));
-
         $json = substr($request, $header_size);
-        //var_dump($request);die;
 
         if($json)
         {
