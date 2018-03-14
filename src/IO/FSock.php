@@ -59,10 +59,10 @@ class FSock extends Extensions\SmartObject implements IConnection
                 'X-BulkGate-Application-Language: '. (string) $this->application_language
             ),
             'content' => $request->getData(),
-            "ignore_errors" => true,
+            'ignore_errors' => true,
         )));
 
-        $connection = fopen($request->getUrl(), 'r', false, $context);
+        $connection = @fopen($request->getUrl(), 'r', false, $context);
 
         if ($connection)
         {

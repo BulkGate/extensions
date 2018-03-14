@@ -17,6 +17,5 @@ if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost')
     }
 
     //define('BULKGATE_DEBUG', 'http://localhost/bulkgate');
-    define('BULKGATE_DEBUG', 'https://test.bulkgate.com:4443');
     //define('BULKGATE_DEV_MODE', true);
 }

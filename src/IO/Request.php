@@ -42,21 +42,20 @@ class Request extends BulkGate\Extensions\SmartObject
 
     public function getData()
     {
-        if($this->content_type === self::CONTENT_TYPE_ZIP)
+        try
         {
-            return BulkGate\Extensions\Compress::compress($this->data);
-        }
-        else
-        {
-            try
+            if($this->content_type === self::CONTENT_TYPE_ZIP)
+            {
+                return BulkGate\Extensions\Compress::compress(BulkGate\Extensions\Json::encode($this->data));
+            }
+            else
             {
                 return BulkGate\Extensions\Json::encode($this->data);
             }
-            catch (BulkGate\Extensions\JsonException $e)
-            {
-                throw new InvalidRequestException;
-            }
-
+        }
+        catch (BulkGate\Extensions\JsonException $e)
+        {
+            throw new InvalidRequestException;
         }
     }
 
