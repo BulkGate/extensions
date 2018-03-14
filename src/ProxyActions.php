@@ -28,6 +28,7 @@ class ProxyActions extends SmartObject
         $this->module = $module;
         $this->synchronize = $synchronize;
         $this->settings = $settings;
+        $this->translator = $translator;
     }
 
     public function login(array $data)
