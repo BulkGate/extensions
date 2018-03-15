@@ -12,3 +12,5 @@ class MemberAccessException extends Exception {}
 class JsonException extends Exception {}
 
 class InvalidKeyException extends Exception {}
+
+class ServiceNotFoundException extends Exception {}
