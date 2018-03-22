@@ -144,16 +144,16 @@ class Settings extends SmartObject implements ISettings
     public function install()
     {
         $this->db->execute("
-            CREATE TABLE IF NOT EXISTS `".$this->db->prefix()."bulkgate_module` (
-            `scope` varchar(50) NOT NULL DEFAULT 'main',
-            `key` varchar(50) NOT NULL,
-            `type` enum('text','int','float','bool','json') DEFAULT 'text',
-            `value` text NOT NULL,
-            
-            `datetime` datetime DEFAULT NULL,
-            `order` int(11) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`scope`,`key`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            CREATE TABLE `".$this->db->prefix()."bulkgate_module` (
+              `scope` varchar(50) NOT NULL DEFAULT 'main',
+              `key` varchar(50) NOT NULL,
+              `type` enum('text','int','float','bool','json') DEFAULT 'text',
+              `value` text NOT NULL,
+              `datetime` bigint(20) DEFAULT NULL,
+              `order` int(11) NOT NULL DEFAULT '0',
+              `synchronize_flag` enum('none','add','change','delete') NOT NULL DEFAULT 'none',
+              PRIMARY KEY (`scope`,`key`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
     }
 
