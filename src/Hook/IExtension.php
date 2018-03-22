@@ -1,7 +1,6 @@
 <?php
 namespace BulkGate\Extensions\Hook;
 
-use BulkGate\Extensions\Hook;
 use BulkGate\Extensions\Database;
 
 /**
@@ -15,5 +14,5 @@ interface IExtension
      * @param Variables $variables
      * @return void
      */
-    public function extend(Database\IDatabase $database, Hook\Variables $variables);
+    public function extend(Database\IDatabase $database, Variables $variables);
 }
