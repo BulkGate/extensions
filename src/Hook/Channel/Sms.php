@@ -13,7 +13,7 @@ class Sms extends BulkGate\Extensions\SmartObject implements IChannel
     private $active = false;
 
     /** @var string */
-    private $message = '';
+    private $template = '';
 
     /** @var bool */
     private $unicode = false;
@@ -56,7 +56,7 @@ class Sms extends BulkGate\Extensions\SmartObject implements IChannel
     {
         return array(
             'active'         => (bool) $this->active,
-            'message'        => (string) $this->message,
+            'template'       => (string) $this->template,
             'unicode'        => (bool) $this->unicode,
             'flash'          => (bool) $this->flash,
             'sender_type'    => (string) $this->sender_type,

@@ -52,4 +52,18 @@ class Variables extends SmartObject
     {
         return (array) $this->variables;
     }
+
+    public function __toString()
+    {
+        $output = '$php = array('.PHP_EOL;
+
+        foreach ($this->variables as $key => $variable)
+        {
+            $output .= "\t".'\''.$key.'\' => \''.$variable.'\','.PHP_EOL;
+        }
+
+        $output .= ");";
+
+        return $output;
+    }
 }

@@ -41,5 +41,11 @@ interface ILoad
      * @param Variables $variables
      * @return void
      */
+    public function product(Variables $variables);
+
+    /**
+     * @param Variables $variables
+     * @return void
+     */
     public function load(Variables $variables);
 }

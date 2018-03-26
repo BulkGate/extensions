@@ -13,7 +13,7 @@ class DefaultChannel extends \stdClass implements IChannel
     public $active = false;
 
     /** @var string */
-    public $message = '';
+    public $template = '';
 
     /** @var bool */
     public $customer = false;
