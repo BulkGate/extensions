@@ -115,4 +115,24 @@ class Response extends \stdClass
             }
         }
     }
+
+    public function set($key, $value)
+    {
+        if(isset($this->data))
+        {
+            list($reducer, $container, $variable) = Key::decode($key);
+
+            if(!isset($this->data[$reducer]))
+            {
+                $this->data[$reducer] = array();
+            }
+
+            if(!isset($this->data[$reducer][$container]))
+            {
+                $this->data[$reducer][$container] = array();
+            }
+
+            $this->data[$reducer][$container][$variable] = $value;
+        }
+    }
 }

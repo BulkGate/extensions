@@ -109,4 +109,28 @@ class ProxyActions extends SmartObject
             ));
         });
     }
+
+    public function loadCustomersCount($id, $type = 'load', array $data = array())
+    {
+        switch ($type)
+        {
+            case 'addFilter':
+                return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/add-filter/'.(int)$id), $data));
+                break;
+            case 'removeFilter':
+                return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/remove-filter/'.(int)$id), $data));
+                break;
+            case 'load':
+            default:
+                return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/load/'.(int)$id)));
+                break;
+        }
+    }
+
+    public function saveModuleCustomers($id, array $data)
+    {
+        return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/save/'.(int) $id), array(
+            'customers' => $data
+        )));
+    }
 }
