@@ -22,13 +22,17 @@ class ProxyActions extends SmartObject
     /** @var Translator */
     private $translator;
 
-    public function __construct(IO\IConnection $connection, IModule $module, Synchronize $synchronize, ISettings $settings, Translator $translator)
+    /** @var ICustomers */
+    private $customers;
+
+    public function __construct(IO\IConnection $connection, IModule $module, Synchronize $synchronize, ISettings $settings, Translator $translator, ICustomers $customers)
     {
         $this->connection = $connection;
         $this->module = $module;
         $this->synchronize = $synchronize;
         $this->settings = $settings;
         $this->translator = $translator;
+        $this->customers = $customers;
     }
 
     public function login(array $data)
@@ -110,27 +114,37 @@ class ProxyActions extends SmartObject
         });
     }
 
-    public function loadCustomersCount($id, $type = 'load', array $data = array())
+    public function loadCustomersCount($application_id, $id, $type = 'load', array $data = array())
     {
         switch ($type)
         {
             case 'addFilter':
-                return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/add-filter/'.(int)$id), $data));
+                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/add-filter/'.(int)$id), $data));
                 break;
             case 'removeFilter':
-                return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/remove-filter/'.(int)$id), $data));
+                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/remove-filter/'.(int)$id), $data));
                 break;
             case 'load':
             default:
-                return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/load/'.(int)$id)));
+                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/load/'.(int)$id)));
                 break;
         }
+
+        $campaign = $response->get('campaign::campaign');
+
+        $response->set('campaign::module_recipients', $this->customers->loadCount(woosms_isset($campaign['filter_module'], $application_id)));
+
+        return $response;
     }
 
-    public function saveModuleCustomers($id, array $data)
+    public function saveModuleCustomers($application_id, $campaign_id)
     {
-        return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/save/'.(int) $id), array(
-            'customers' => $data
+        $response = $this->loadCustomersCount($application_id, $campaign_id);
+
+        $campaign = $response->get('campaign::campaign');
+
+        return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/save/'.(int) $campaign_id), array(
+            'customers' => $this->customers->load(woosms_isset($campaign['filter_module'], $application_id))
         )));
     }
 }

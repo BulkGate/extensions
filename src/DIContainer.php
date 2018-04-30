@@ -32,6 +32,12 @@ abstract class DIContainer extends SmartObject
 
 
     /**
+     * @return ICustomers
+     */
+    abstract protected function createCustomers();
+
+
+    /**
      * @return Settings
      */
     protected function createSettings()
@@ -77,7 +83,7 @@ abstract class DIContainer extends SmartObject
      */
     protected function createProxy()
     {
-        return new ProxyActions($this->getService('connection'), $this->getService('module'), $this->getService('synchronize'), $this->getService('settings'), $this->getService('translator'));
+        return new ProxyActions($this->getService('connection'), $this->getService('module'), $this->getService('synchronize'), $this->getService('settings'), $this->getService('translator'), $this->getService('customers'));
     }
 
 
