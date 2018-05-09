@@ -7,7 +7,7 @@ use BulkGate;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Settings extends SmartObject implements ISettings
+class Settings extends Strict implements ISettings
 {
     /** @var array */
     public $data = array();
@@ -41,7 +41,14 @@ class Settings extends SmartObject implements ISettings
         }
         else
         {
-            $result = $this->db->execute('SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = "'.$this->db->escape($scope).'" AND `synchronize_flag` != "delete" ORDER BY `order`');
+            $result = $this->db->execute(
+                $this->db->prepare(
+                    'SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = %s AND `synchronize_flag` != "delete" ORDER BY `order`',
+                    array(
+                        $scope
+                    )
+                )
+            );
 
             if($result->getNumRows() > 0)
             {
@@ -92,20 +99,37 @@ class Settings extends SmartObject implements ISettings
 
         list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
 
-        $result = $this->db->execute('SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = "'.$this->db->escape($scope).'" AND `key` = "'.$this->db->escape($key).'"');
+        $result = $this->db->execute(
+            $this->db->prepare(
+                'SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = %s AND `key` = %s',
+                array(
+                    $scope, $key
+                )
+            )
+        );
 
         if($result->getNumRows() > 0)
         {
-            $this->db->execute('UPDATE `'.$this->db->prefix().'bulkgate_module` SET value = "'.$this->db->escape($value).'", `datetime` = "'.$this->db->escape($meta['datetime']).'" '.$this->parseMeta($meta).' WHERE `scope` = "'.$this->db->escape($scope).'" AND `key` = "'.$this->db->escape($key).'"');
+            $this->db->execute(
+                $this->db->prepare(
+                    'UPDATE `'.$this->db->prefix().'bulkgate_module` SET value = %s, `datetime` = %s '.$this->parseMeta($meta).' WHERE `scope` = %s AND `key` = %s',
+                    array(
+                        $value, $meta['datetime'], $scope, $key
+                    )
+                ));
         }
         else
         {
-            $this->db->execute('
+            $this->db->execute(
+                $this->db->prepare('
                         INSERT INTO `'.$this->db->prefix().'bulkgate_module` SET 
-                            `scope`="'.$this->db->escape($scope).'",
-                            `key`="'.$this->db->escape($key).'",
-                            `value`="'.$this->db->escape($value).'"'.$this->parseMeta($meta).'
-            ');
+                            `scope`= %s,
+                            `key`= %s,
+                            `value`= %s'.$this->parseMeta($meta).'
+                ', array(
+                    $scope, $key, $value
+                ))
+            );
         }
     }
 
@@ -114,16 +138,20 @@ class Settings extends SmartObject implements ISettings
         if($settings_key === null)
         {
             $this->db->execute('
-                        DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `synchronize_flag` = "delete"
+                DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `synchronize_flag` = "delete"
             ');
         }
         else
         {
             list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
 
-            $this->db->execute('
-                        DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = "'.$this->db->escape($scope).'" AND `key` = "'.$this->db->escape($key).'"
-            ');
+            $this->db->execute(
+                $this->db->prepare('
+                    DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = %s AND `key` = %s
+                ', array(
+                    $scope, $key
+                ))
+            );
         }
     }
 
@@ -174,16 +202,16 @@ class Settings extends SmartObject implements ISettings
             switch ($key)
             {
                 case 'type':
-                    $output[] = '`type`="'.$this->db->escape($this->checkType($item)).'"';
+                    $output[] = $this->db->prepare('`type`= %s', array($this->checkType($item)));
                 break;
                 case 'datetime':
-                    $output[] = '`datetime`="'.$this->db->escape($this->formatDate($item)).'"';
+                    $output[] = $this->db->prepare('`datetime`= %s', array($this->formatDate($item)));
                 break;
                 case 'order':
-                    $output[] = '`order`="'.$this->db->escape((int) $item).'"';
+                    $output[] = $this->db->prepare('`order`= %s', array((int) $item));
                 break;
                 case 'synchronize_flag':
-                    $output[] = '`synchronize_flag`="'.$this->db->escape($this->checkFlag($item)).'"';
+                    $output[] = $this->db->prepare('`synchronize_flag`= %s', array($this->checkFlag($item)));
                 break;
             }
         }
