@@ -45,6 +45,7 @@ class ProxyActions extends Strict
         {
             $this->settings->set('static:application_id', $login['application_id'], array('type' => 'int'));
             $this->settings->set('static:application_token', $login['application_token']);
+            $this->settings->set('static:synchronize', 0);
             return isset($login['application_token_temp']) ? $login['application_token_temp'] : 'guest';
         }
         return $response;
@@ -65,6 +66,7 @@ class ProxyActions extends Strict
         {
             $this->settings->set('static:application_id', $register['application_id'], array('type' => 'int'));
             $this->settings->set('static:application_token', $register['application_token']);
+            $this->settings->set('static:synchronize', 0);
             return isset($register['application_token_temp']) ? $register['application_token_temp'] : 'guest';
         }
         return $response;
