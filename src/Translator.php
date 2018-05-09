@@ -5,7 +5,7 @@ namespace BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Translator extends SmartObject
+class Translator extends Strict
 {
     /** @var ISettings */
     private $settings;

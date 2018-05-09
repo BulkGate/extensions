@@ -5,7 +5,7 @@ namespace BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class ProxyActions extends SmartObject
+class ProxyActions extends Strict
 {
     /** @var IO\IConnection */
     private $connection;

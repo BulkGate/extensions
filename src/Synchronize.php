@@ -8,7 +8,7 @@ use BulkGate\Extensions\IO\AuthenticateException;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Synchronize extends SmartObject
+class Synchronize extends Strict
 {
     /** @var ISettings */
     private $settings;

@@ -14,6 +14,13 @@ interface IDatabase
     public function execute($sql);
 
     /**
+     * @param string $sql
+     * @param array $params
+     * @return string
+     */
+    public function prepare($sql, array $params = array());
+
+    /**
      * @return mixed
      */
     public function lastId();

@@ -7,7 +7,7 @@ use BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Authenticator extends Extensions\SmartObject
+class Authenticator extends Extensions\Strict
 {
     /** @var Extensions\Settings */
     private $settings;

@@ -7,7 +7,7 @@ use BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class FSock extends Extensions\SmartObject implements IConnection
+class FSock extends Extensions\Strict implements IConnection
 {
     /** @var  string */
     private $application_id;

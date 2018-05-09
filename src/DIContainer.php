@@ -12,7 +12,7 @@ use BulkGate;
  * @method Synchronize getSynchronize()
  * @method ProxyActions getProxy()
  */
-abstract class DIContainer extends SmartObject
+abstract class DIContainer extends Strict
 {
 
     /** @var array */

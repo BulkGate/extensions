@@ -7,7 +7,7 @@ use BulkGate;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class cUrl extends BulkGate\Extensions\SmartObject implements IConnection
+class cUrl extends BulkGate\Extensions\Strict implements IConnection
 {
     /** @var  int */
     private $application_id;

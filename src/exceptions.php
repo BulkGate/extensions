@@ -7,7 +7,7 @@ namespace BulkGate\Extensions;
  */
 class Exception extends \Exception {}
 
-class MemberAccessException extends Exception {}
+class StrictException extends Exception {}
 
 class JsonException extends Exception {}
 

@@ -9,7 +9,7 @@ require_once __DIR__.'/exceptions.php';
 require_once __DIR__.'/IModule.php';
 require_once __DIR__.'/ICustomers.php';
 require_once __DIR__.'/Escape.php';
-require_once __DIR__.'/SmartObject.php';
+require_once __DIR__.'/Strict.php';
 require_once __DIR__.'/DIContainer.php';
 require_once __DIR__.'/Compress.php';
 require_once __DIR__.'/Json.php';

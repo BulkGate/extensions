@@ -7,7 +7,7 @@ use BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-abstract class Api extends Extensions\SmartObject
+abstract class Api extends Extensions\Strict
 {
     /** @var Extensions\Database\IDatabase */
     protected $database;

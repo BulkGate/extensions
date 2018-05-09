@@ -5,7 +5,7 @@ namespace BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class JsonResponse extends SmartObject
+class JsonResponse extends Strict
 {
     public static function send($data)
     {

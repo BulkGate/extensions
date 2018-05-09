@@ -7,7 +7,7 @@ use BulkGate;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class HttpHeaders extends BulkGate\Extensions\SmartObject
+class HttpHeaders extends BulkGate\Extensions\Strict
 {
     /** @var array */
     private $headers = array();

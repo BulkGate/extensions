@@ -7,7 +7,7 @@ use BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Iterator extends Extensions\SmartObject implements \Iterator
+class Iterator extends Extensions\Strict implements \Iterator
 {
     /** @var array */
     protected $array = array();

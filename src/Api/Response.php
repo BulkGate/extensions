@@ -7,7 +7,7 @@ use BulkGate;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Response extends BulkGate\Extensions\SmartObject implements IResponse
+class Response extends BulkGate\Extensions\Strict implements IResponse
 {
     /** @var mixed */
     private $payload;
