@@ -41,7 +41,7 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
             {
                 $this->{$key} = $value;
             }
-            catch (BulkGate\Extensions\MemberAccessException $e)
+            catch (BulkGate\Extensions\StrictException $e)
             {
             }
         }
