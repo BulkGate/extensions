@@ -172,7 +172,7 @@ class Settings extends Strict implements ISettings
     public function install()
     {
         $this->db->execute("
-            CREATE TABLE `".$this->db->prefix()."bulkgate_module` (
+            CREATE TABLE IF NOT EXISTS `".$this->db->prefix()."bulkgate_module` (
               `scope` varchar(50) NOT NULL DEFAULT 'main',
               `key` varchar(50) NOT NULL,
               `type` enum('text','int','float','bool','json') DEFAULT 'text',
