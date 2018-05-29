@@ -19,14 +19,14 @@ class Variables extends Strict
 
     public function set($key, $value, $alternative = '')
     {
-        if(is_scalar($value) && strlen($value) > 0)
+        if(is_scalar($value) && strlen((string) $value) > 0)
         {
             $this->variables[$key] = $value;
         }
 
         if(!isset($this->variables[$key]))
         {
-            if(is_scalar($alternative) && strlen($alternative) > 0)
+            if(is_scalar($alternative) && strlen((string) $alternative) > 0)
             {
                 $this->variables[$key] = (string) $alternative;
             }
