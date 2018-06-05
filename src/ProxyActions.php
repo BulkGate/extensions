@@ -134,7 +134,11 @@ class ProxyActions extends Strict
 
         $campaign = $response->get('campaign::campaign');
 
-        $response->set('campaign::module_recipients', $this->customers->loadCount(woosms_isset($campaign['filter_module'], $application_id)));
+        $response->set('campaign::module_recipients', $this->customers->loadCount(
+            isset($campaign['filter_module']) && isset($campaign['filter_module'][$application_id]) ?
+                $campaign['filter_module'] :
+                array()
+        ));
 
         return $response;
     }
@@ -146,7 +150,11 @@ class ProxyActions extends Strict
         $campaign = $response->get('campaign::campaign');
 
         return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/save/'.(int) $campaign_id), array(
-            'customers' => $this->customers->load(woosms_isset($campaign['filter_module'], $application_id))
+            'customers' => $this->customers->load(
+                isset($campaign['filter_module']) && isset($campaign['filter_module'][$application_id]) ?
+                    $campaign['filter_module'] :
+                    array()
+            )
         )));
     }
 }
