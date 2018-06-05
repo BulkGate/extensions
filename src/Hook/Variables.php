@@ -17,22 +17,25 @@ class Variables extends Strict
         $this->variables = $variables;
     }
 
-    public function set($key, $value, $alternative = '')
+    public function set($key, $value, $alternative = '', $rewrite = true)
     {
-        if(is_scalar($value) && strlen((string) $value) > 0)
+        if(!isset($this->variables[$key]) || $rewrite)
         {
-            $this->variables[$key] = $value;
-        }
-
-        if(!isset($this->variables[$key]))
-        {
-            if(is_scalar($alternative) && strlen((string) $alternative) > 0)
+            if(is_scalar($value) && strlen(trim((string) $value)) > 0)
             {
-                $this->variables[$key] = (string) $alternative;
+                $this->variables[$key] = $value;
             }
-            else
+
+            if(!isset($this->variables[$key]))
             {
-                $this->variables[$key] = '';
+                if(is_scalar($alternative) && strlen(trim((string) $alternative)) > 0)
+                {
+                    $this->variables[$key] = (string) $alternative;
+                }
+                else
+                {
+                    $this->variables[$key] = '';
+                }
             }
         }
 
@@ -62,7 +65,7 @@ class Variables extends Strict
             $output .= "\t".'\''.$key.'\' => \''.$variable.'\','.PHP_EOL;
         }
 
-        $output .= ");";
+        $output .= ');';
 
         return $output;
     }
