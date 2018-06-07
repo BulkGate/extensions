@@ -88,6 +88,12 @@ class ProxyActions extends Strict
         {
             $this->translator->setLanguage($settings['language']);
         }
+
+        if(isset($settings['language_mutation']))
+        {
+            $this->settings->set('main:language_mutation', $settings['language_mutation'], array('type' => 'int'));
+            $this->settings->set('static:synchronize', 0, array('type' => 'int'));
+        }
     }
 
     public function saveCustomerNotifications(array $data)

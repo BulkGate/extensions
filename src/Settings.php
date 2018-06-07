@@ -183,6 +183,7 @@ class Settings extends Strict implements ISettings
               PRIMARY KEY (`scope`,`key`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
+        $this->set('static:synchronize', 0, array('type' => 'int'));
     }
 
     public function uninstall()

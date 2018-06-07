@@ -30,7 +30,7 @@ class Hook extends BulkGate\Extensions\Strict
     public function __construct($url, $language_iso, $shop_id, BulkGate\Extensions\IO\IConnection $connection, BulkGate\Extensions\ISettings $settings, ILoad $load)
     {
         $this->url = $url;
-        $this->language_iso = (string) $language_iso;
+        $this->language_iso = $settings->load('main:language_mutation', false) ? (string) $language_iso : 'default';
         $this->shop_id = (int) $shop_id;
         $this->connection = $connection;
         $this->settings = $settings;
@@ -58,6 +58,6 @@ class Hook extends BulkGate\Extensions\Strict
 
     private function getKey($name, $type)
     {
-        return $type.'_sms-'.$this->language_iso.'-'.$this->shop_id.':'.$name;
+        return $type.'_sms-'.($type === 'admin' ? 'default' : $this->language_iso).'-'.$this->shop_id.':'.$name;
     }
 }
