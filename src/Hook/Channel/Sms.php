@@ -22,10 +22,10 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
     private $flash = false;
 
     /** @var string */
-    private $sender_type = "gSystem";
+    private $senderType = "gSystem";
 
     /** @var string */
-    private $sender_value = "";
+    private $senderValue = "";
 
     /** @var bool */
     private $customer = false;
@@ -59,8 +59,8 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
             'template'       => (string) $this->template,
             'unicode'        => (bool) $this->unicode,
             'flash'          => (bool) $this->flash,
-            'sender_type'    => (string) $this->sender_type,
-            'sender_value'   => (string) $this->sender_value,
+            'senderType'     => (string) $this->senderType,
+            'senderValue'    => (string) $this->senderValue,
             'customer'       => (bool) $this->customer,
             'admins'         => (array) $this->admins
         );

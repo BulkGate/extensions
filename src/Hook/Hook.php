@@ -39,11 +39,10 @@ class Hook extends BulkGate\Extensions\Strict
 
     public function run($name, Variables $variables)
     {
-        $customer = new Settings((array) $this->settings->load($this->getKey($name, 'customer')));
-        $admin = new Settings((array) $this->settings->load($this->getKey($name, 'admin')));
+        $customer = new Settings((array) $this->settings->load($this->getKey($name, 'customer'), array()));
+        $admin = new Settings((array) $this->settings->load($this->getKey($name, 'admin'), array()));
 
-
-        if(count($customer->toArray()) > 0 || count($admin->toArray()))
+        if(count($customer->toArray()) > 0 || count($admin->toArray()) > 0)
         {
             $this->load->load($variables);
 
