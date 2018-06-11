@@ -142,7 +142,7 @@ class ProxyActions extends Strict
 
         $response->set('campaign::module_recipients', $this->customers->loadCount(
             isset($campaign['filter_module']) && isset($campaign['filter_module'][$application_id]) ?
-                $campaign['filter_module'] :
+                $campaign['filter_module'][$application_id] :
                 array()
         ));
 
@@ -158,7 +158,7 @@ class ProxyActions extends Strict
         return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/save/'.(int) $campaign_id), array(
             'customers' => $this->customers->load(
                 isset($campaign['filter_module']) && isset($campaign['filter_module'][$application_id]) ?
-                    $campaign['filter_module'] :
+                    $campaign['filter_module'][$application_id] :
                     array()
             )
         )));
