@@ -40,4 +40,10 @@ interface IDatabase
      * @return array
      */
     public function getSqlList();
+
+    /**
+     * @param string $table
+     * @return string
+     */
+    public function table($table);
 }

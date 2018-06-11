@@ -43,7 +43,7 @@ class Settings extends Strict implements ISettings
         {
             $result = $this->db->execute(
                 $this->db->prepare(
-                    'SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = %s AND `synchronize_flag` != "delete" ORDER BY `order`',
+                    'SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `synchronize_flag` != "delete" ORDER BY `order`',
                     array(
                         $scope
                     )
@@ -101,7 +101,7 @@ class Settings extends Strict implements ISettings
 
         $result = $this->db->execute(
             $this->db->prepare(
-                'SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = %s AND `key` = %s',
+                'SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `key` = %s',
                 array(
                     $scope, $key
                 )
@@ -112,7 +112,7 @@ class Settings extends Strict implements ISettings
         {
             $this->db->execute(
                 $this->db->prepare(
-                    'UPDATE `'.$this->db->prefix().'bulkgate_module` SET value = %s, `datetime` = %s '.$this->parseMeta($meta).' WHERE `scope` = %s AND `key` = %s',
+                    'UPDATE `'.$this->db->table('bulkgate_module').'` SET value = %s, `datetime` = %s '.$this->parseMeta($meta).' WHERE `scope` = %s AND `key` = %s',
                     array(
                         $value, $meta['datetime'], $scope, $key
                     )
@@ -122,7 +122,7 @@ class Settings extends Strict implements ISettings
         {
             $this->db->execute(
                 $this->db->prepare('
-                        INSERT INTO `'.$this->db->prefix().'bulkgate_module` SET 
+                        INSERT INTO `'.$this->db->table('bulkgate_module').'` SET 
                             `scope`= %s,
                             `key`= %s,
                             `value`= %s'.$this->parseMeta($meta).'
@@ -138,7 +138,7 @@ class Settings extends Strict implements ISettings
         if($settings_key === null)
         {
             $this->db->execute('
-                DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `synchronize_flag` = "delete"
+                DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `synchronize_flag` = "delete"
             ');
         }
         else
@@ -147,7 +147,7 @@ class Settings extends Strict implements ISettings
 
             $this->db->execute(
                 $this->db->prepare('
-                    DELETE FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` = %s AND `key` = %s
+                    DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `key` = %s
                 ', array(
                     $scope, $key
                 ))
@@ -159,7 +159,7 @@ class Settings extends Strict implements ISettings
     {
         $output = array();
 
-        $result = $this->db->execute('SELECT * FROM `'.$this->db->prefix().'bulkgate_module` WHERE `scope` != "static"')->getRows();
+        $result = $this->db->execute('SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` != "static"')->getRows();
 
         foreach($result as $row)
         {
@@ -172,7 +172,7 @@ class Settings extends Strict implements ISettings
     public function install()
     {
         $this->db->execute("
-            CREATE TABLE IF NOT EXISTS `".$this->db->prefix()."bulkgate_module` (
+            CREATE TABLE IF NOT EXISTS `".$this->db->table('bulkgate_module')."` (
               `scope` varchar(50) NOT NULL DEFAULT 'main',
               `key` varchar(50) NOT NULL,
               `type` enum('text','int','float','bool','json') DEFAULT 'text',
@@ -190,7 +190,7 @@ class Settings extends Strict implements ISettings
     {
         if ($this->load('main:delete_db', false))
         {
-            $this->db->execute("DROP TABLE IF EXISTS `" . $this->db->prefix() . "bulkgate_module`");
+            $this->db->execute("DROP TABLE IF EXISTS `" . $this->db->table('bulkgate_module') . "`");
         }
     }
 
