@@ -8,6 +8,7 @@ namespace BulkGate\Extensions;
 require_once __DIR__.'/exceptions.php';
 require_once __DIR__.'/IModule.php';
 require_once __DIR__.'/ICustomers.php';
+require_once __DIR__.'/ILocale.php';
 require_once __DIR__.'/Escape.php';
 require_once __DIR__.'/Strict.php';
 require_once __DIR__.'/DIContainer.php';
@@ -23,6 +24,10 @@ require_once __DIR__.'/Settings.php';
 require_once __DIR__.'/Synchronize.php';
 require_once __DIR__.'/Headers.php';
 require_once __DIR__.'/ProxyActions.php';
+require_once __DIR__.'/LocaleSimple.php';
+require_once __DIR__.'/LocaleIntl.php';
+require_once __DIR__.'/Customers.php';
+require_once __DIR__.'/Helpers.php';
 
 require_once __DIR__.'/Hook/Channel/IChannel.php';
 require_once __DIR__.'/Hook/Channel/DefaultChannel.php';
