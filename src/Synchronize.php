@@ -46,6 +46,7 @@ class Synchronize extends Strict
         {
             $module_settings = $this->settings->synchronize();
             $server_settings = call_user_func($callback, $module_settings);
+
             if($server_settings->exception)
             {
                 return $server_settings;
@@ -54,7 +55,7 @@ class Synchronize extends Strict
             {
                 if ($server_settings instanceof Response)
                 {
-                    foreach ($server_settings->get(':synchronize:') as $server_setting)
+                    foreach ((array) $server_settings->get(':synchronize:') as $server_setting)
                     {
                         $key = $this->getKey($server_setting->scope, $server_setting->key);
 
