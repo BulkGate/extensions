@@ -46,6 +46,7 @@ class Synchronize extends Strict
         {
             $module_settings = $this->settings->synchronize();
             $server_settings = call_user_func($callback, $module_settings);
+
             if($server_settings->exception)
             {
                 return $server_settings;
