@@ -21,9 +21,9 @@ class Translator extends Strict
         $this->settings = $settings;
     }
 
-    public function init()
+    public function init($iso = null)
     {
-        $this->iso = $this->settings->load('main:language', 'en');
+        $this->iso = $iso ? $iso : $this->settings->load('main:language', 'en');
 
         if($this->iso)
         {

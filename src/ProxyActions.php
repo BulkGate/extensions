@@ -1,5 +1,6 @@
 <?php
 namespace BulkGate\Extensions;
+use BulkGate\Extensions\IO\AuthenticateException;
 
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
@@ -74,7 +75,15 @@ class ProxyActions extends Strict
 
     public function authenticate()
     {
-        return $this->connection->run(new IO\Request($this->module->getUrl('/widget/authenticate')));
+        try
+        {
+            return $this->connection->run(new IO\Request($this->module->getUrl('/widget/authenticate')));
+        }
+        catch (IO\AuthenticateException $e)
+        {
+            $this->settings->delete('static:application_token');
+            throw $e;
+        }
     }
 
     public function saveSettings(array $settings)
