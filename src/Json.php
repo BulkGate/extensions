@@ -35,6 +35,8 @@ class Json
 
     public static function decode($json, $options = 0)
     {
+        $json = str_replace(array("\f", "\n", "\r", "\t", "\"", "\\"),  array("\\f", "\\n", "\\r", "\\t", "\\\"", "\\\\"), $json);
+
         $forceArray = (bool) ($options & self::FORCE_ARRAY);
         $flags = JSON_BIGINT_AS_STRING;
 
