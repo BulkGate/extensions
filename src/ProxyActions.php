@@ -113,7 +113,7 @@ class ProxyActions extends Strict
         return $this->synchronize->synchronize(function($module_settings) use ($self, $data)
         {
             return $self->connection->run(new IO\Request($self->module->getUrl('/module/hook/customer'),
-                array_merge(array("__synchronize" => $module_settings), + $data),
+                array_merge(array("__synchronize" => $module_settings), $data),
                 true
             ));
         });
