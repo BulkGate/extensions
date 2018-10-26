@@ -181,7 +181,7 @@ class Settings extends Strict implements ISettings
               `order` int(11) NOT NULL DEFAULT '0',
               `synchronize_flag` enum('none','add','change','delete') NOT NULL DEFAULT 'none',
               PRIMARY KEY (`scope`,`key`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ) DEFAULT CHARSET=utf8;
         ");
         $this->set('static:synchronize', 0, array('type' => 'int'));
     }
