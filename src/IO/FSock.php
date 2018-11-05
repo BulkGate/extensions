@@ -48,21 +48,22 @@ class FSock extends Extensions\Strict implements IConnection
      */
     public function run(Request $request)
     {
-        $context = stream_context_create(array('http' => array(
-            'method' => 'POST',
-            'header' => array(
-                'Content-type: ' . $request->getContentType(),
-                'X-BulkGate-Application-ID: ' . (string) $this->application_id,
-                'X-BulkGate-Application-Token: ' . (string) $this->application_token,
-                'X-BulkGate-Application-Url: ' . (string) $this->application_url,
-                'X-BulkGate-Application-Product: '. (string) $this->application_product,
-                'X-BulkGate-Application-Language: '. (string) $this->application_language
-            ),
-            'content' => $request->getData(),
-            'ignore_errors' => true,
+        $connection = @fopen($request->getUrl(), 'r', false, stream_context_create(array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => array(
+                    'Content-type: ' . $request->getContentType(),
+                    'X-BulkGate-Application-ID: ' . (string) $this->application_id,
+                    'X-BulkGate-Application-Token: ' . (string) $this->application_token,
+                    'X-BulkGate-Application-Url: ' . (string) $this->application_url,
+                    'X-BulkGate-Application-Product: '. (string) $this->application_product,
+                    'X-BulkGate-Application-Language: '. (string) $this->application_language
+                ),
+                'content' => $request->getData(),
+                'ignore_errors' => true,
+                'timeout' => $request->getTimeout()
+            )
         )));
-
-        $connection = @fopen($request->getUrl(), 'r', false, $context);
 
         if ($connection)
         {
@@ -76,6 +77,6 @@ class FSock extends Extensions\Strict implements IConnection
 
             return new Response($result, $header->getContentType());
         }
-        throw new ConnectionException('SMS server is unavailable');
+        return new Response(array('data' => array(), 'exception' => 'ConnectionException', 'error' => array('Server ('.$request->getUrl().') is unavailable. Try contact your hosting provider.')));
     }
 }

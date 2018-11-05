@@ -54,7 +54,7 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
             CURLOPT_URL => $request->getUrl(),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
+            CURLOPT_TIMEOUT => $request->getTimeout(),
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
@@ -74,10 +74,10 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
         /*curl_setopt($curl, CURLOPT_TIMEOUT_MS, 100);
         curl_setopt($curl, CURLOPT_NOSIGNAL, 1);*/
 
-        $request = curl_exec($curl);
+        $response = curl_exec($curl);
         $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        $header = new HttpHeaders(substr($request, 0, $header_size));
-        $json = substr($request, $header_size);
+        $header = new HttpHeaders(substr($response, 0, $header_size));
+        $json = substr($response, $header_size);
 
         if($json)
         {
@@ -86,8 +86,7 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
         }
 
         $error = curl_error($curl);
-
         curl_close($curl);
-        throw new ConnectionException('SMS server is unavailable - '. $error);
+        return new Response(array('data' => array(), 'error' => array('Server ('.$request->getUrl().') is unavailable. Try contact your hosting provider. Reason: '. $error)));
     }
 }

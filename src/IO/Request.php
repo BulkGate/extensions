@@ -13,16 +13,23 @@ class Request extends BulkGate\Extensions\Strict
 
     const CONTENT_TYPE_ZIP = 'application/zip';
 
+    /** @var string */
     private $url;
 
+    /** @var array */
     private $data = array();
 
+    /** @var string */
     private $content_type;
 
-    public function __construct($url, array $data = array(), $compress = false)
+    /** @var int */
+    private $timeout;
+
+    public function __construct($url, array $data = array(), $compress = false, $timeout = 20)
     {
         $this->setUrl($url);
         $this->setData($data, $compress);
+        $this->timeout = max(3 /** min timeout */, (int) $timeout);
     }
 
     public function setData(array $data = array(), $compress = false)
@@ -67,5 +74,10 @@ class Request extends BulkGate\Extensions\Strict
     public function getContentType()
     {
         return (string) $this->content_type;
+    }
+
+    public function getTimeout()
+    {
+        return (int) $this->timeout;
     }
 }

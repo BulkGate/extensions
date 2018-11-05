@@ -30,7 +30,7 @@ class Synchronize extends Strict
             {
                 $self = $this;
                 $this->synchronize(function ($module_settings) use ($url, $self) {
-                    return $self->connection->run(new IO\Request($url, array('__synchronize' => $module_settings), true));
+                    return $self->connection->run(new IO\Request($url, array('__synchronize' => $module_settings), true, (int) $self->settings->load('main:synchronize_timeout', 6)));
                 });
             }
         }
@@ -47,7 +47,7 @@ class Synchronize extends Strict
             $module_settings = $this->settings->synchronize();
             $server_settings = call_user_func($callback, $module_settings);
 
-            if($server_settings->exception)
+            if((isset($server_settings->exception) && $server_settings->exception) || (isset($server_setting->error) && !empty($server_settings->error)))
             {
                 return $server_settings;
             }

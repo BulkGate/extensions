@@ -137,14 +137,14 @@ class ProxyActions extends Strict
         switch ($type)
         {
             case 'addFilter':
-                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/add-filter/'.(int)$id), $data));
+                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/add-filter/'.(int)$id), $data, false, 60));
                 break;
             case 'removeFilter':
-                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/remove-filter/'.(int)$id), $data));
+                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/remove-filter/'.(int)$id), $data, false, 60));
                 break;
             case 'load':
             default:
-                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/load/'.(int)$id)));
+                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/load/'.(int)$id), array(), false, 60));
                 break;
         }
 
@@ -171,6 +171,6 @@ class ProxyActions extends Strict
                     $campaign['filter_module'][$application_id] :
                     array()
             )
-        )));
+        ), true, 120));
     }
 }

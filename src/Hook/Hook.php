@@ -50,7 +50,7 @@ class Hook extends BulkGate\Extensions\Strict
                 'customer_sms' => $customer->toArray(),
                 'admin_sms' => $admin->toArray(),
                 'variables' => $variables->toArray()
-            ), true));
+            ), true, 5));
         }
         return false;
     }

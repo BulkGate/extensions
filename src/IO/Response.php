@@ -9,7 +9,7 @@ use BulkGate, BulkGate\Extensions\Json;
  */
 class Response extends \stdClass
 {
-    public function __construct($data, $content_type)
+    public function __construct($data, $content_type = null)
     {
         if(is_string($data))
         {
@@ -42,6 +42,10 @@ class Response extends \stdClass
             {
                 throw new InvalidResultException('Invalid content type'. $data);
             }
+        }
+        elseif(is_array($data))
+        {
+            $this->load($data);
         }
         else
         {
