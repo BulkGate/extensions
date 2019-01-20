@@ -175,11 +175,11 @@ class Settings extends Strict implements ISettings
             CREATE TABLE IF NOT EXISTS `".$this->db->table('bulkgate_module')."` (
               `scope` varchar(50) NOT NULL DEFAULT 'main',
               `key` varchar(50) NOT NULL,
-              `type` enum('text','int','float','bool','json') DEFAULT 'text',
+              `type` varchar(50) NOT NULL DEFAULT 'text',
               `value` text NOT NULL,
               `datetime` bigint(20) DEFAULT NULL,
               `order` int(11) NOT NULL DEFAULT '0',
-              `synchronize_flag` enum('none','add','change','delete') NOT NULL DEFAULT 'none',
+              `synchronize_flag` varchar(50) NOT NULL DEFAULT 'none',
               PRIMARY KEY (`scope`,`key`)
             ) DEFAULT CHARSET=utf8;
         ");
