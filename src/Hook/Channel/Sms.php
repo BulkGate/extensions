@@ -31,18 +31,14 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
     private $customer = false;
 
     /** @var array */
-    private $admins = array();
+    private $admins = [];
 
     public function __construct(array $data)
     {
-        foreach($data as $key => $value)
-        {
-            try
-            {
+        foreach ($data as $key => $value) {
+            try {
                 $this->{$key} = $value;
-            }
-            catch (BulkGate\Extensions\StrictException $e)
-            {
+            } catch (BulkGate\Extensions\StrictException $e) {
             }
         }
     }
@@ -54,7 +50,7 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
 
     public function toArray()
     {
-        return array(
+        return [
             'active'         => (bool) $this->active,
             'template'       => (string) $this->template,
             'unicode'        => (bool) $this->unicode,
@@ -63,6 +59,6 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
             'senderValue'    => (string) $this->senderValue,
             'customer'       => (bool) $this->customer,
             'admins'         => (array) $this->admins
-        );
+        ];
     }
 }

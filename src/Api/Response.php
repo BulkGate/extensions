@@ -35,12 +35,9 @@ class Response extends BulkGate\Extensions\Strict implements IResponse
     {
         header("Content-Type: {$this->contentType}; charset=utf-8");
 
-        if($this->contentType === 'application/zip')
-        {
+        if ($this->contentType === 'application/zip') {
             echo BulkGate\Extensions\Compress::compress(BulkGate\Extensions\Json::encode($this->payload));
-        }
-        else
-        {
+        } else {
             echo BulkGate\Extensions\Json::encode($this->payload);
         }
     }

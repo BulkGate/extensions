@@ -10,7 +10,7 @@ use BulkGate\Extensions;
 class Iterator extends Extensions\Strict implements \Iterator
 {
     /** @var array */
-    protected $array = array();
+    protected $array = [];
 
     /** @var int */
     private $position = 0;
@@ -21,47 +21,47 @@ class Iterator extends Extensions\Strict implements \Iterator
         $this->position = 0;
     }
 
-    function get($key)
+    public function get($key)
     {
         return isset($this->array[$key]) ? $this->array[$key] : null;
     }
 
-    function set($key, $value)
+    public function set($key, $value)
     {
         return $this->array[$key] = $value;
     }
 
-    function rewind()
+    public function rewind()
     {
         reset($this->array);
     }
 
-    function current()
+    public function current()
     {
         return current($this->array);
     }
 
-    function key()
+    public function key()
     {
         return key($this->array);
     }
 
-    function next()
+    public function next()
     {
         next($this->array);
     }
 
-    function valid()
+    public function valid()
     {
         return key($this->array) !== null;
     }
 
-    function count()
+    public function count()
     {
         return count($this->array);
     }
 
-    function add($value)
+    public function add($value)
     {
         $this->array[] = $value;
     }

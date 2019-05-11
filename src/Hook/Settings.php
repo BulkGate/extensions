@@ -11,18 +11,16 @@ class Settings extends BulkGate\Extensions\Iterator
 {
     public function __construct(array $data)
     {
-        $settings = array();
+        $settings = [];
 
-        foreach($data as $type => $channel)
-        {
-            switch ($type)
-            {
+        foreach ($data as $type => $channel) {
+            switch ($type) {
                 case 'sms':
-                    $settings[$type] = new BulkGate\Extensions\Hook\Channel\Sms((array) $channel);
-                break;
+                    $settings[$type] = new BulkGate\Extensions\Hook\Channel\Sms((array)$channel);
+                    break;
                 default:
-                    $settings[$type] = new BulkGate\Extensions\Hook\Channel\DefaultChannel((array) $channel);
-                break;
+                    $settings[$type] = new BulkGate\Extensions\Hook\Channel\DefaultChannel((array)$channel);
+                    break;
             }
         }
 
@@ -31,13 +29,11 @@ class Settings extends BulkGate\Extensions\Iterator
 
     public function toArray()
     {
-        $output = array();
+        $output = [];
 
         /** @var BulkGate\Extensions\Hook\Channel\IChannel $item */
-        foreach($this->array as $key => $item)
-        {
-            if($item->isActive())
-            {
+        foreach ($this->array as $key => $item) {
+            if ($item->isActive()) {
                 $output[$key] = $item->toArray();
             }
         }

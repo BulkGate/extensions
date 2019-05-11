@@ -18,7 +18,7 @@ interface IDatabase
      * @param array $params
      * @return string
      */
-    public function prepare($sql, array $params = array());
+    public function prepare($sql, array $params = []);
 
     /**
      * @return mixed

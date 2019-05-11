@@ -19,7 +19,7 @@ interface ISettings
      * @param mixed|$value
      * @param array $meta
      */
-    public function set($settings_key, $value, array $meta = array());
+    public function set($settings_key, $value, array $meta = []);
 
     /**
      * @param string|null $settings_key

@@ -1,6 +1,8 @@
 <?php
 namespace BulkGate\Extensions;
 
+use DateTime;
+
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
@@ -27,20 +29,20 @@ interface ILocale
     public function int($number);
 
     /**
-     * @param \DateTime $dateTime
+     * @param DateTime $dateTime
      * @return string
      */
-    public function datetime(\DateTime $dateTime);
+    public function datetime(DateTime $dateTime);
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      * @return string
      */
-    public function date(\DateTime $date);
+    public function date(DateTime $date);
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      * @return string
      */
-    public function time(\DateTime $date);
+    public function time(DateTime $date);
 }

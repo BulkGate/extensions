@@ -7,21 +7,18 @@ use BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Result extends Extensions\Iterator implements \Iterator
+class Result extends Extensions\Iterator
 {
     /** @var array|mixed */
-    protected $row = array();
+    protected $row = [];
 
     public function __construct(array $rows)
     {
-        foreach($rows as $key => $value)
-        {
-            if(is_array($value))
-            {
+        parent::__construct([]);
+        foreach ($rows as $key => $value) {
+            if (is_array($value)) {
                 $this->array[$key] = new Extensions\Buffer($value);
-            }
-            else
-            {
+            } else {
                 $this->array[$key] = $value;
             }
         }

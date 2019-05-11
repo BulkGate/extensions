@@ -1,6 +1,7 @@
 <?php
 
 namespace BulkGate\Extensions;
+
 use BulkGate\Extensions\IO\AuthenticateException;
 
 /**
@@ -27,8 +28,14 @@ class ProxyActions extends Strict
     /** @var ICustomers */
     private $customers;
 
-    public function __construct(IO\IConnection $connection, IModule $module, Synchronize $synchronize, ISettings $settings, Translator $translator, ICustomers $customers)
-    {
+    public function __construct(
+        IO\IConnection $connection,
+        IModule $module,
+        Synchronize $synchronize,
+        ISettings $settings,
+        Translator $translator,
+        ICustomers $customers
+    ) {
         $this->connection = $connection;
         $this->module = $module;
         $this->synchronize = $synchronize;
@@ -43,9 +50,8 @@ class ProxyActions extends Strict
 
         $login = (array) $response->get('::login');
 
-        if(isset($login['application_id']) && isset($login['application_token']))
-        {
-            $this->settings->set('static:application_id', $login['application_id'], array('type' => 'int'));
+        if (isset($login['application_id']) && isset($login['application_token'])) {
+            $this->settings->set('static:application_id', $login['application_id'], ['type' => 'int']);
             $this->settings->set('static:application_token', $login['application_token']);
             $this->settings->set('static:synchronize', 0);
             return isset($login['application_token_temp']) ? $login['application_token_temp'] : 'guest';
@@ -64,9 +70,8 @@ class ProxyActions extends Strict
 
         $register = (array) $response->get('::register');
 
-        if(isset($register['application_id']) && isset($register['application_token']))
-        {
-            $this->settings->set('static:application_id', $register['application_id'], array('type' => 'int'));
+        if (isset($register['application_id']) && isset($register['application_token'])) {
+            $this->settings->set('static:application_id', $register['application_id'], ['type' => 'int']);
             $this->settings->set('static:application_token', $register['application_token']);
             $this->settings->set('static:synchronize', 0);
             return isset($register['application_token_temp']) ? $register['application_token_temp'] : 'guest';
@@ -76,12 +81,9 @@ class ProxyActions extends Strict
 
     public function authenticate()
     {
-        try
-        {
+        try {
             return $this->connection->run(new IO\Request($this->module->getUrl('/widget/authenticate')));
-        }
-        catch (IO\AuthenticateException $e)
-        {
+        } catch (IO\AuthenticateException $e) {
             $this->settings->delete('static:application_token');
             throw $e;
         }
@@ -89,20 +91,17 @@ class ProxyActions extends Strict
 
     public function saveSettings(array $settings)
     {
-        if(isset($settings['delete_db']))
-        {
-            $this->settings->set('main:delete_db', $settings['delete_db'], array('type' => 'int'));
+        if (isset($settings['delete_db'])) {
+            $this->settings->set('main:delete_db', $settings['delete_db'], ['type' => 'int']);
         }
 
-        if(isset($settings['language']))
-        {
+        if (isset($settings['language'])) {
             $this->translator->setLanguage($settings['language']);
         }
 
-        if(isset($settings['language_mutation']))
-        {
-            $this->settings->set('main:language_mutation', $settings['language_mutation'], array('type' => 'int'));
-            $this->settings->set('static:synchronize', 0, array('type' => 'int'));
+        if (isset($settings['language_mutation'])) {
+            $this->settings->set('main:language_mutation', $settings['language_mutation'], ['type' => 'int']);
+            $this->settings->set('static:synchronize', 0, ['type' => 'int']);
         }
     }
 
@@ -110,10 +109,10 @@ class ProxyActions extends Strict
     {
         $self = $this;
 
-        return $this->synchronize->synchronize(function($module_settings) use ($self, $data)
-        {
-            return $self->connection->run(new IO\Request($self->module->getUrl('/module/hook/customer'),
-                array_merge(array("__synchronize" => $module_settings), $data),
+        return $this->synchronize->synchronize(function ($module_settings) use ($self, $data) {
+            return $self->connection->run(new IO\Request(
+                $self->module->getUrl('/module/hook/customer'),
+                array_merge(["__synchronize" => $module_settings], $data),
                 true
             ));
         });
@@ -123,28 +122,42 @@ class ProxyActions extends Strict
     {
         $self = $this;
 
-        return $this->synchronize->synchronize(function($module_settings) use ($self, $data)
-        {
-            return $self->connection->run(new IO\Request($self->module->getUrl('/module/hook/admin'),
-                array_merge(array("__synchronize" => $module_settings), $data),
+        return $this->synchronize->synchronize(function ($module_settings) use ($self, $data) {
+            return $self->connection->run(new IO\Request(
+                $self->module->getUrl('/module/hook/admin'),
+                array_merge(["__synchronize" => $module_settings], $data),
                 true
             ));
         });
     }
 
-    public function loadCustomersCount($application_id, $id, $type = 'load', array $data = array())
+    public function loadCustomersCount($application_id, $id, $type = 'load', array $data = [])
     {
-        switch ($type)
-        {
+        switch ($type) {
             case 'addFilter':
-                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/add-filter/'.(int)$id), $data, false, 60));
+                $response = $this->connection->run(new IO\Request(
+                    $this->module->getUrl('/module/sms-campaign/add-filter/' . (int)$id),
+                    $data,
+                    false,
+                    60
+                ));
                 break;
             case 'removeFilter':
-                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/remove-filter/'.(int)$id), $data, false, 60));
+                $response = $this->connection->run(new IO\Request(
+                    $this->module->getUrl('/module/sms-campaign/remove-filter/' . (int)$id),
+                    $data,
+                    false,
+                    60
+                ));
                 break;
             case 'load':
             default:
-                $response = $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/load/'.(int)$id), array(), false, 60));
+                $response = $this->connection->run(new IO\Request(
+                    $this->module->getUrl('/module/sms-campaign/load/' . (int)$id),
+                    [],
+                    false,
+                    60
+                ));
                 break;
         }
 
@@ -153,7 +166,7 @@ class ProxyActions extends Strict
         $response->set('campaign::module_recipients', $this->customers->loadCount(
             isset($campaign['filter_module']) && isset($campaign['filter_module'][$application_id]) ?
                 $campaign['filter_module'][$application_id] :
-                array()
+                []
         ));
 
         return $response;
@@ -165,12 +178,14 @@ class ProxyActions extends Strict
 
         $campaign = $response->get('campaign::campaign');
 
-        return $this->connection->run(new IO\Request($this->module->getUrl('/module/sms-campaign/save/'.(int) $campaign_id), array(
-            'customers' => $this->customers->load(
+        return $this->connection->run(new IO\Request(
+            $this->module->getUrl('/module/sms-campaign/save/'.(int) $campaign_id),
+            ['customers' => $this->customers->load(
                 isset($campaign['filter_module']) && isset($campaign['filter_module'][$application_id]) ?
-                    $campaign['filter_module'][$application_id] :
-                    array()
-            )
-        ), true, 120));
+                    $campaign['filter_module'][$application_id] : []
+            )],
+            true,
+            120
+        ));
     }
 }

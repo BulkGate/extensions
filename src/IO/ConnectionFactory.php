@@ -27,15 +27,23 @@ class ConnectionFactory extends BulkGate\Extensions\Strict
      */
     public function create($url, $product)
     {
-        if($this->io === null)
-        {
-            if(extension_loaded('curl'))
-            {
-                $this->io = new cUrl($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product, $this->settings->load('main:language', 'en'));
-            }
-            else
-            {
-                $this->io = new FSock($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product, $this->settings->load('main:language', 'en'));
+        if ($this->io === null) {
+            if (extension_loaded('curl')) {
+                $this->io = new cUrl(
+                    $this->settings->load('static:application_id'),
+                    $this->settings->load('static:application_token'),
+                    $url,
+                    $product,
+                    $this->settings->load('main:language', 'en')
+                );
+            } else {
+                $this->io = new FSock(
+                    $this->settings->load('static:application_id'),
+                    $this->settings->load('static:application_token'),
+                    $url,
+                    $product,
+                    $this->settings->load('main:language', 'en')
+                );
             }
         }
         return $this->io;

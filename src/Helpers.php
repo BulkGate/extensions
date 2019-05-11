@@ -1,6 +1,8 @@
 <?php
 namespace BulkGate\Extensions;
 
+use DateTime;
+
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
@@ -13,26 +15,19 @@ class Helpers extends Strict
 
         $list = $settings->load('static:out_of_stock', false);
 
-        $list = $list !== false ? unserialize($list) : array();
+        $list = $list !== false ? unserialize($list) : [];
 
-        if(is_array($list))
-        {
-            foreach($list as $key => $time)
-            {
-                if($time < time())
-                {
-                    unset($list[(string) $key]);
+        if (is_array($list)) {
+            foreach ($list as $key => $time) {
+                if ($time < time()) {
+                    unset($list[(string)$key]);
                 }
             }
+        } else {
+            $list = [];
         }
-        else
-        {
-            $list = array();
-        }
-
-        if(!isset($list[(string) $product_id]))
-        {
-            $list[(string) $product_id] = time() + 86400;
+        if (!isset($list[(string)$product_id])) {
+            $list[(string)$product_id] = (new DateTime('now + 1 day'))->getTimestamp();
             $result = true;
         }
 

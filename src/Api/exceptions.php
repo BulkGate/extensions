@@ -7,10 +7,30 @@ use BulkGate\Extensions;
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class ConnectionException extends Extensions\Exception {}
+class ConnectionException extends Extensions\Exception
+{
+}
 
-class InvalidRequestException extends ConnectionException {}
+/**
+ * Class InvalidRequestException
+ * @package BulkGate\Extensions\Api
+ */
+class InvalidRequestException extends ConnectionException
+{
+}
 
-class UnknownActionException extends ConnectionException {}
+/**
+ * Class UnknownActionException
+ * @package BulkGate\Extensions\Api
+ */
+class UnknownActionException extends ConnectionException
+{
+}
 
-class MethodNotAllowedException extends ConnectionException {}
+/**
+ * Class MethodNotAllowedException
+ * @package BulkGate\Extensions\Api
+ */
+class MethodNotAllowedException extends ConnectionException
+{
+}
