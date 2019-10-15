@@ -37,7 +37,10 @@ class Strict
         {
             $this->$name = $value;
         }
-        throw new StrictException("Cannot write an undeclared property $class::\$$name.");
+        else 
+        {
+            throw new StrictException("Cannot write an undeclared property $class::\$$name.");   
+        }
     }
 
 
