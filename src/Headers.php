@@ -10,7 +10,7 @@ use BulkGate;
 class Headers extends Strict
 {
     /** @var array */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * @param null|string $name
@@ -19,15 +19,13 @@ class Headers extends Strict
      */
     public function get($name = null, $default = null)
     {
-        if(empty($this->headers))
-        {
+        if (empty($this->headers)) {
             $this->init();
         }
 
         $name = strtolower($name);
 
-        if($name !== null)
-        {
+        if ($name !== null) {
             return isset($this->headers[$name]) ? $this->headers[$name] : $default;
         }
         return $this->headers;
@@ -35,23 +33,14 @@ class Headers extends Strict
 
     private function init()
     {
-        if (function_exists('apache_request_headers'))
-        {
+        if (function_exists('apache_request_headers')) {
             $this->headers = array_change_key_case(apache_request_headers(), CASE_LOWER);
-        }
-        else
-        {
-            foreach($_SERVER as $key => $value)
-            {
-                if(strncmp($key, 'HTTP_', 5) === 0)
-                {
-                    $this->headers[
-                        strtolower(
-                            strtr(
-                                substr($key, 5), '_', '-'
-                            )
-                        )
-                    ] = $value;
+        } else {
+            foreach ($_SERVER as $key => $value) {
+                if (strncmp($key, 'HTTP_', 5) === 0) {
+                    $this->headers[strtolower(
+                        strtr(substr($key, 5), '_', '-')
+                    )] = $value;
                 }
             }
         }

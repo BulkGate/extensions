@@ -1,68 +1,51 @@
 <?php
 namespace BulkGate\Extensions\IO;
 
-use BulkGate, BulkGate\Extensions\Json;
+use BulkGate;
+use BulkGate\Extensions\Json;
+use stdClass;
 
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Response extends \stdClass
+class Response extends stdClass
 {
     public function __construct($data, $content_type = null)
     {
-        if(is_string($data))
-        {
-            if($content_type === 'application/json')
-            {
-                try
-                {
+        if (is_string($data)) {
+            if ($content_type === 'application/json') {
+                try {
                     $result = Json::decode($data, Json::FORCE_ARRAY);
 
-                    if(is_array($result))
-                    {
-                        $this->load((array) $result);
+                    if (is_array($result)) {
+                        $this->load((array)$result);
                     }
+                } catch (BulkGate\Extensions\JsonException $e) {
+                    throw new InvalidResultException('Json parse error: ' . $data);
                 }
-                catch (BulkGate\Extensions\JsonException $e)
-                {
-                    throw new InvalidResultException('Json parse error: '. $data);
-                }
-            }
-            elseif($content_type === 'application/zip')
-            {
+            } elseif ($content_type === 'application/zip') {
                 $result = Json::decode(BulkGate\Extensions\Compress::decompress($data));
 
-                if(is_array($result) || $result instanceof \stdClass)
-                {
-                    $this->load((array) $result);
+                if (is_array($result) || $result instanceof stdClass) {
+                    $this->load((array)$result);
                 }
+            } else {
+                throw new InvalidResultException('Invalid content type' . $data);
             }
-            else
-            {
-                throw new InvalidResultException('Invalid content type'. $data);
-            }
-        }
-        elseif(is_array($data))
-        {
+        } elseif (is_array($data)) {
             $this->load($data);
-        }
-        else
-        {
+        } else {
             throw new InvalidResultException('Input not string (JSON)');
         }
     }
 
     public function load(array $array)
     {
-        if(isset($array['signal']) && $array['signal'] === 'authenticate')
-        {
+        if (isset($array['signal']) && $array['signal'] === 'authenticate') {
             throw new AuthenticateException;
-        }
-        else
-        {
-            foreach($array as $key => $value)
-            {
+        } else {
+            foreach ($array as $key => $value) {
                 $this->{$key} = $value;
             }
         }
@@ -72,27 +55,17 @@ class Response extends \stdClass
     {
         $path = Key::decode($key);
 
-        return array_reduce($path, function($prev, $now)
-        {
-            if($now === Key::DEFAULT_VARIABLE)
-            {
+        return array_reduce($path, function ($prev, $now) {
+            if ($now === Key::DEFAULT_VARIABLE) {
                 return $prev;
-            }
-            else
-            {
-                if($prev)
-                {
-                    if(is_array($prev))
-                    {
+            } else {
+                if ($prev) {
+                    if (is_array($prev)) {
                         return isset($prev[$now]) ? $prev[$now] : null;
-                    }
-                    else
-                    {
+                    } else {
                         return isset($prev->$now) ? $prev->$now : null;
                     }
-                }
-                else
-                {
+                } else {
                     return null;
                 }
             }
@@ -101,20 +74,19 @@ class Response extends \stdClass
 
     public function remove($key)
     {
-        if(isset($this->data))
-        {
+        if (isset($this->data)) {
             list($reducer, $container, $variable) = Key::decode($key);
 
-            if(isset($this->data->{$reducer}) && isset($this->data->{$reducer}->{$container}) && isset($this->data->{$reducer}->{$container}->{$variable}))
-            {
+            if (isset(
+                $this->data->{$reducer},
+                $this->data->{$reducer}->{$container},
+                $this->data->{$reducer}->{$container}->{$variable}
+            )
+            ) {
                 unset($this->data->{$reducer}->{$container}->{$variable});
-            }
-            else if(isset($this->data->{$reducer}) && isset($this->data->{$reducer}->{$container}))
-            {
+            } elseif (isset($this->data->{$reducer}, $this->data->{$reducer}->{$container})) {
                 unset($this->data->{$reducer}->{$container});
-            }
-            else if(isset($this->data->{$reducer}))
-            {
+            } elseif (isset($this->data->{$reducer})) {
                 unset($this->data->{$reducer});
             }
         }
@@ -122,18 +94,15 @@ class Response extends \stdClass
 
     public function set($key, $value)
     {
-        if(isset($this->data))
-        {
+        if (isset($this->data)) {
             list($reducer, $container, $variable) = Key::decode($key);
 
-            if(!isset($this->data[$reducer]))
-            {
-                $this->data[$reducer] = array();
+            if (!isset($this->data[$reducer])) {
+                $this->data[$reducer] = [];
             }
 
-            if(!isset($this->data[$reducer][$container]))
-            {
-                $this->data[$reducer][$container] = array();
+            if (!isset($this->data[$reducer][$container])) {
+                $this->data[$reducer][$container] = [];
             }
 
             $this->data[$reducer][$container][$variable] = $value;

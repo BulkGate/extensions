@@ -16,26 +16,22 @@ abstract class DIContainer extends Strict
 {
 
     /** @var array */
-    protected $services = array();
-
+    protected $services = [];
 
     /**
      * @return Database\IDatabase
      */
     abstract protected function createDatabase();
 
-
     /**
      * @return IModule
      */
     abstract protected function createModule();
 
-
     /**
      * @return ICustomers
      */
     abstract protected function createCustomers();
-
 
     /**
      * @return Settings
@@ -44,7 +40,6 @@ abstract class DIContainer extends Strict
     {
         return new Settings($this->getService('database'));
     }
-
 
     /**
      * @return IO\IConnection
@@ -59,7 +54,6 @@ abstract class DIContainer extends Strict
         return $factory->create($module->url(), $module->product());
     }
 
-
     /**
      * @return Translator
      */
@@ -67,7 +61,6 @@ abstract class DIContainer extends Strict
     {
         return new Translator($this->getService('settings'));
     }
-
 
     /**
      * @return Synchronize
@@ -77,15 +70,20 @@ abstract class DIContainer extends Strict
         return new Synchronize($this->getService('settings'), $this->getService('connection'));
     }
 
-
     /**
      * @return ProxyActions
      */
     protected function createProxy()
     {
-        return new ProxyActions($this->getService('connection'), $this->getService('module'), $this->getService('synchronize'), $this->getService('settings'), $this->getService('translator'), $this->getService('customers'));
+        return new ProxyActions(
+            $this->getService('connection'),
+            $this->getService('module'),
+            $this->getService('synchronize'),
+            $this->getService('settings'),
+            $this->getService('translator'),
+            $this->getService('customers')
+        );
     }
-
 
     /**
      * @param $name
@@ -96,23 +94,14 @@ abstract class DIContainer extends Strict
     {
         $name = ucfirst($name);
 
-        if(isset($this->services[$name]))
-        {
+        if (isset($this->services[$name])) {
             return $this->services[$name];
         }
-        else
-        {
-            if(method_exists($this, 'create'.$name))
-            {
-                return $this->services[$name] = call_user_func(array($this, 'create'.$name));
-            }
-            else
-            {
-                throw new ServiceNotFoundException("Dependency injection container - Service $name not found");
-            }
+        if (method_exists($this, 'create' . $name)) {
+            return $this->services[$name] = $this->{'create' . $name}();
         }
+        throw new ServiceNotFoundException("Dependency injection container - Service $name not found");
     }
-
 
     /**
      * @param string $name
@@ -120,10 +109,9 @@ abstract class DIContainer extends Strict
      * @return mixed
      * @throws ServiceNotFoundException
      */
-    public function __call($name, array $args = array())
+    public function __call($name, array $args = [])
     {
-        if(preg_match("~^get(?<name>[A-Z][a-zA-Z0-9_]*)~", $name, $match))
-        {
+        if (preg_match("~^get(?<name>[A-Z][a-zA-Z0-9_]*)~", $name, $match)) {
             return $this->getService($match['name']);
         }
 

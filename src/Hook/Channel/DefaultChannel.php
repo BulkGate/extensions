@@ -2,12 +2,13 @@
 namespace BulkGate\Extensions\Hook\Channel;
 
 use BulkGate;
+use stdClass;
 
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class DefaultChannel extends \stdClass implements IChannel
+class DefaultChannel extends stdClass implements IChannel
 {
     /** @var bool */
     public $active = false;
@@ -19,12 +20,11 @@ class DefaultChannel extends \stdClass implements IChannel
     public $customer = false;
 
     /** @var array */
-    public $admins = array();
+    public $admins = [];
 
     public function __construct(array $data)
     {
-        foreach($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $this->{$key} = $value;
         }
     }

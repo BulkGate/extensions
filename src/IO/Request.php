@@ -17,7 +17,7 @@ class Request extends BulkGate\Extensions\Strict
     private $url;
 
     /** @var array */
-    private $data = array();
+    private $data = [];
 
     /** @var string */
     private $content_type;
@@ -25,16 +25,16 @@ class Request extends BulkGate\Extensions\Strict
     /** @var int */
     private $timeout;
 
-    public function __construct($url, array $data = array(), $compress = false, $timeout = 20)
+    public function __construct($url, array $data = [], $compress = false, $timeout = 20)
     {
         $this->setUrl($url);
         $this->setData($data, $compress);
         $this->timeout = max(3 /** min timeout */, (int) $timeout);
     }
 
-    public function setData(array $data = array(), $compress = false)
+    public function setData(array $data = [], $compress = false)
     {
-        $this->data = (array) $data;
+        $this->data = $data;
         $this->content_type = $compress ? self::CONTENT_TYPE_ZIP : self::CONTENT_TYPE_JSON;
 
         return $this;
@@ -49,26 +49,19 @@ class Request extends BulkGate\Extensions\Strict
 
     public function getData()
     {
-        try
-        {
-            if($this->content_type === self::CONTENT_TYPE_ZIP)
-            {
+        try {
+            if ($this->content_type === self::CONTENT_TYPE_ZIP) {
                 return BulkGate\Extensions\Compress::compress(BulkGate\Extensions\Json::encode($this->data));
             }
-            else
-            {
-                return BulkGate\Extensions\Json::encode($this->data);
-            }
-        }
-        catch (BulkGate\Extensions\JsonException $e)
-        {
+            return BulkGate\Extensions\Json::encode($this->data);
+        } catch (BulkGate\Extensions\JsonException $e) {
             throw new InvalidRequestException;
         }
     }
 
     public function getUrl()
     {
-        return (string) $this->url;
+        return $this->url;
     }
 
     public function getContentType()

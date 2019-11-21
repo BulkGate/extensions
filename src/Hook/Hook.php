@@ -27,8 +27,14 @@ class Hook extends BulkGate\Extensions\Strict
     /** @var ILoad */
     private $load;
 
-    public function __construct($url, $language_iso, $shop_id, BulkGate\Extensions\IO\IConnection $connection, BulkGate\Extensions\ISettings $settings, ILoad $load)
-    {
+    public function __construct(
+        $url,
+        $language_iso,
+        $shop_id,
+        BulkGate\Extensions\IO\IConnection $connection,
+        BulkGate\Extensions\ISettings $settings,
+        ILoad $load
+    ) {
         $this->url = $url;
         $this->language_iso = $settings->load('main:language_mutation', false) ? (string) $language_iso : 'default';
         $this->shop_id = (int) $shop_id;
@@ -39,11 +45,10 @@ class Hook extends BulkGate\Extensions\Strict
 
     public function run($name, Variables $variables)
     {
-        $customer = new Settings((array) $this->settings->load($this->getKey($name, 'customer'), array()));
-        $admin = new Settings((array) $this->settings->load($this->getKey($name, 'admin'), array()));
+        $customer = new Settings((array) $this->settings->load($this->getKey($name, 'customer'), []));
+        $admin = new Settings((array) $this->settings->load($this->getKey($name, 'admin'), []));
 
-        if(count($customer->toArray()) > 0 || count($admin->toArray()) > 0)
-        {
+        if (count($customer->toArray()) > 0 || count($admin->toArray()) > 0) {
             $this->load->load($variables);
 
             return $this->connection->run(new BulkGate\Extensions\IO\Request($this->url, array(

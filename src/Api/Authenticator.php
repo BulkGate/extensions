@@ -19,8 +19,8 @@ class Authenticator extends Extensions\Strict
 
     public function authenticate($application_id, $application_token)
     {
-        if($this->settings->load("static:application_id") === $application_id && $this->settings->load("static:application_token") === $application_token)
-        {
+        if ($this->settings->load("static:application_id") === $application_id &&
+            $this->settings->load("static:application_token") === $application_token) {
             return true;
         }
         throw new ConnectionException('Unauthorized', 401);

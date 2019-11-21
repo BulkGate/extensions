@@ -32,8 +32,13 @@ class FSock extends Extensions\Strict implements IConnection
      * @param $application_product
      * @param $application_language
      */
-    public function __construct($application_id, $application_token, $application_url, $application_product, $application_language)
-    {
+    public function __construct(
+        $application_id,
+        $application_token,
+        $application_url,
+        $application_product,
+        $application_language
+    ) {
         $this->application_id = $application_id;
         $this->application_token = $application_token;
         $this->application_url = $application_url;
@@ -48,25 +53,24 @@ class FSock extends Extensions\Strict implements IConnection
      */
     public function run(Request $request)
     {
-        $connection = @fopen($request->getUrl(), 'r', false, stream_context_create(array(
-            'http' => array(
+        $connection = @fopen($request->getUrl(), 'r', false, stream_context_create([
+            'http' => [
                 'method' => 'POST',
-                'header' => array(
+                'header' => [
                     'Content-type: ' . $request->getContentType(),
                     'X-BulkGate-Application-ID: ' . (string) $this->application_id,
                     'X-BulkGate-Application-Token: ' . (string) $this->application_token,
                     'X-BulkGate-Application-Url: ' . (string) $this->application_url,
                     'X-BulkGate-Application-Product: '. (string) $this->application_product,
                     'X-BulkGate-Application-Language: '. (string) $this->application_language
-                ),
+                ],
                 'content' => $request->getData(),
                 'ignore_errors' => true,
                 'timeout' => $request->getTimeout()
-            )
-        )));
+            ]
+        ]));
 
-        if ($connection)
-        {
+        if ($connection) {
             $meta = stream_get_meta_data($connection);
 
             $header = new HttpHeaders(implode("\r\n", $meta['wrapper_data']));
@@ -77,6 +81,10 @@ class FSock extends Extensions\Strict implements IConnection
 
             return new Response($result, $header->getContentType());
         }
-        return new Response(array('data' => array(), 'exception' => 'ConnectionException', 'error' => array('Server ('.$request->getUrl().') is unavailable. Try contact your hosting provider.')));
+        return new Response([
+            'data' => [],
+            'exception' => 'ConnectionException',
+            'error' => ['Server ('.$request->getUrl().') is unavailable. Try contact your hosting provider.']
+        ]);
     }
 }

@@ -16,13 +16,11 @@ class Strict
     {
         $class = get_class($this);
 
-        if(property_exists($class, $name))
-        {
+        if (property_exists($class, $name)) {
             return $this->$name;
         }
         throw new StrictException("Cannot read an undeclared property $class::\$$name.");
     }
-
 
     /**
      * @param $name
@@ -33,8 +31,7 @@ class Strict
     {
         $class = get_class($this);
 
-        if(property_exists($class, $name))
-        {
+        if (property_exists($class, $name)) {
             $this->$name = $value;
         }
         else 
@@ -42,7 +39,6 @@ class Strict
             throw new StrictException("Cannot write an undeclared property $class::\$$name.");   
         }
     }
-
 
     /**
      * @param string $name
@@ -52,13 +48,11 @@ class Strict
     {
         $class = get_class($this);
 
-        if(property_exists($class, $name))
-        {
+        if (property_exists($class, $name)) {
             return isset($this->$name);
         }
         return false;
     }
-
 
     /**
      * @param string $name
@@ -69,7 +63,6 @@ class Strict
         throw new StrictException('You can\'t unset undeclared property '.__CLASS__.'::$'.$name);
     }
 
-
     /**
      * @param string $name
      * @param array $arguments
@@ -79,7 +72,6 @@ class Strict
     {
         throw new StrictException('You can\'t call undeclared method '.__CLASS__.'::$'.$name);
     }
-
 
     /**
      * @param string $name

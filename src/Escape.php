@@ -15,8 +15,8 @@ class Escape
     public static function js($s)
     {
         return str_replace(
-            array("\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'),
-            array('\u2028', '\u2029', ']]\x3E', '\x3C!'),
+            ["\xe2\x80\xa8", "\xe2\x80\xa9", ']]>', '<!'],
+            ['\u2028', '\u2029', ']]\x3E', '\x3C!'],
             json_encode($s, JSON_UNESCAPED_UNICODE)
         );
     }
@@ -24,7 +24,8 @@ class Escape
     public static function url($s)
     {
         $s = (string) $s;
-        return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)\z~i', $s) ? self::htmlAttr($s) : '';
+        return preg_match('~^(?:(?:https?|ftp)://[^@]+(?:/.*)?|mailto:.+|[/?#].*|[^:]+)\z~i', $s) ?
+            self::htmlAttr($s) : '';
     }
 
     public static function htmlAttr($s, $double = true)

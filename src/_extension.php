@@ -58,7 +58,6 @@ require_once __DIR__.'/Api/IResponse.php';
 require_once __DIR__.'/Api/Response.php';
 require_once __DIR__.'/Api/Api.php';
 
-if(file_exists(__DIR__.'/Hook/IExtension.php'))
-{
-    require_once __DIR__.'/Hook/IExtension.php';
+if (file_exists(__DIR__ . '/Hook/IExtension.php')) {
+    require_once __DIR__ . '/Hook/IExtension.php';
 }

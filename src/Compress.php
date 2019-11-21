@@ -9,15 +9,14 @@ use BulkGate;
  */
 class Compress
 {
-    static public function compress($data, $encoding_mode = 9)
+    public static function compress($data, $encoding_mode = 9)
     {
         return base64_encode(gzencode(serialize($data), $encoding_mode));
     }
 
-    static public function decompress($data)
+    public static function decompress($data)
     {
-        if($data)
-        {
+        if ($data) {
             return unserialize(gzinflate(substr(base64_decode($data), 10, -8)));
         }
         return false;

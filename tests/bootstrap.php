@@ -4,13 +4,10 @@
  * @link https://www.bulkgate.com/
  */
 
-if(file_exists(__DIR__.'/Tester/bootstrap.php'))
-{
-    require_once __DIR__.'/Tester/bootstrap.php';
+if (file_exists(__DIR__ . '/Tester/bootstrap.php')) {
+    require_once __DIR__ . '/Tester/bootstrap.php';
 
     Tester\Environment::setup();
-}
-else
-{
+} else {
     exit("Nette tester not found");
 }

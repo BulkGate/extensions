@@ -1,19 +1,21 @@
 <?php
 namespace BulkGate\Extensions;
 
+use stdClass;
+
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Buffer extends \stdClass
+class Buffer extends stdClass
 {
     /** @var array */
-    private $buffer = array();
+    private $buffer = [];
 
     /** @var mixed */
-    private $default_value = null;
+    private $default_value;
 
-    public function __construct(array $array = array(), $default_value = null)
+    public function __construct(array $array = [], $default_value = null)
     {
         $this->buffer = $array;
         $this->default_value = $default_value;
@@ -21,8 +23,7 @@ class Buffer extends \stdClass
 
     public function __get($name)
     {
-        if(isset($this->buffer[$name]))
-        {
+        if (isset($this->buffer[$name])) {
             return $this->buffer[$name];
         }
         return $this->default_value;
