@@ -1,36 +1,46 @@
 <?php
+
 namespace BulkGate\Extensions;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 class Settings extends Strict implements ISettings
 {
     /** @var array */
     public $data = array();
 
-    /** @var BulkGate\Extensions\Database\IDatabase */
+    /** @var Database\IDatabase */
     private $db;
 
-    public function __construct(BulkGate\Extensions\Database\IDatabase $database)
+    /** @var array */
+    private $types = array('text','int','float','bool','json');
+
+    /** @var array */
+    private $flags = array('none','add','change','delete');
+
+
+    public function __construct(Database\IDatabase $database)
     {
         $this->db = $database;
     }
 
-    public function load($settings_key, $default = false)
-    {
-        list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
 
-        if(isset($this->data[$scope]))
+    public function load($settings_key, $default = false, $reload = false)
+    {
+        list($scope, $key) = Key::decode($settings_key);
+
+        if (isset($this->data[$scope]) && !$reload)
         {
-            if(isset($this->data[$scope][$key]))
+            if (isset($this->data[$scope][$key]))
             {
                 return $this->data[$scope][$key];
             }
-            else if(isset($this->data[$scope]) && !isset($this->data[$scope][$key]) && $key !== null)
+            else if (isset($this->data[$scope]) && !isset($this->data[$scope][$key]) && $key !== null)
             {
                 return $default;
             }
@@ -44,9 +54,7 @@ class Settings extends Strict implements ISettings
             $result = $this->db->execute(
                 $this->db->prepare(
                     'SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `synchronize_flag` != "delete" ORDER BY `order`',
-                    array(
-                        $scope
-                    )
+                    array($scope)
                 )
             );
 
@@ -56,19 +64,19 @@ class Settings extends Strict implements ISettings
                 {
                     switch($item->type)
                     {
-                        case "text":
+                        case 'text':
                             $this->data[$scope][$item->key] = (string) $item->value;
                         break;
-                        case "int":
+                        case 'int':
                             $this->data[$scope][$item->key] = (int) $item->value;
                         break;
-                        case "float":
+                        case 'float':
                             $this->data[$scope][$item->key] = (float) $item->value;
                         break;
-                        case "bool":
+                        case 'bool':
                             $this->data[$scope][$item->key] = (bool) $item->value;
                         break;
-                        case "json":
+                        case 'json':
                             try
                             {
                                 $this->data[$scope][$item->key] = BulkGate\Extensions\Json::decode($item->value);
@@ -86,36 +94,33 @@ class Settings extends Strict implements ISettings
             {
                 $this->data[$scope] = false;
             }
-            return $this->load($settings_key);
+            return $this->load($settings_key, $default);
         }
     }
 
+
     public function set($settings_key, $value, array $meta = array())
     {
-        if(!isset($meta['datetime']))
+        if (!isset($meta['datetime']))
         {
             $meta['datetime'] = time();
         }
 
-        list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
+        list($scope, $key) = Key::decode($settings_key);
 
         $result = $this->db->execute(
             $this->db->prepare(
                 'SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `key` = %s',
-                array(
-                    $scope, $key
-                )
+                array($scope, $key)
             )
         );
 
-        if($result->getNumRows() > 0)
+        if ($result->getNumRows() > 0)
         {
             $this->db->execute(
                 $this->db->prepare(
                     'UPDATE `'.$this->db->table('bulkgate_module').'` SET value = %s, `datetime` = %s '.$this->parseMeta($meta).' WHERE `scope` = %s AND `key` = %s',
-                    array(
-                        $value, $meta['datetime'], $scope, $key
-                    )
+                    array($value, $meta['datetime'], $scope, $key)
                 ));
         }
         else
@@ -126,34 +131,29 @@ class Settings extends Strict implements ISettings
                             `scope`= %s,
                             `key`= %s,
                             `value`= %s'.$this->parseMeta($meta).'
-                ', array(
-                    $scope, $key, $value
-                ))
+                ', array($scope, $key, $value))
             );
         }
     }
+
 
     public function delete($settings_key = null)
     {
-        if($settings_key === null)
+        if ($settings_key === null)
         {
-            $this->db->execute('
-                DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `synchronize_flag` = "delete"
-            ');
+            $this->db->execute('DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `synchronize_flag` = "delete"');
         }
         else
         {
-            list($scope, $key) = BulkGate\Extensions\Key::decode($settings_key);
+            list($scope, $key) = Key::decode($settings_key);
 
             $this->db->execute(
-                $this->db->prepare('
-                    DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `key` = %s
-                ', array(
-                    $scope, $key
-                ))
+                $this->db->prepare('DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `key` = %s',
+                array($scope, $key))
             );
         }
     }
+
 
     public function synchronize()
     {
@@ -161,7 +161,7 @@ class Settings extends Strict implements ISettings
 
         $result = $this->db->execute('SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` != "static"')->getRows();
 
-        foreach($result as $row)
+        foreach ($result as $row)
         {
             $output[$row->scope.':'.$row->key] = $row;
         }
@@ -169,22 +169,24 @@ class Settings extends Strict implements ISettings
         return $output;
     }
 
+
     public function install()
     {
         $this->db->execute("
             CREATE TABLE IF NOT EXISTS `".$this->db->table('bulkgate_module')."` (
               `scope` varchar(50) NOT NULL DEFAULT 'main',
               `key` varchar(50) NOT NULL,
-              `type` varchar(50) NOT NULL DEFAULT 'text',
+              `type` enum('text','int','float','bool','json') DEFAULT 'text',
               `value` text NOT NULL,
               `datetime` bigint(20) DEFAULT NULL,
               `order` int(11) NOT NULL DEFAULT '0',
-              `synchronize_flag` varchar(50) NOT NULL DEFAULT 'none',
+              `synchronize_flag` enum('none','add','change','delete') NOT NULL DEFAULT 'none',
               PRIMARY KEY (`scope`,`key`)
             ) DEFAULT CHARSET=utf8;
         ");
         $this->set('static:synchronize', 0, array('type' => 'int'));
     }
+
 
     public function uninstall()
     {
@@ -194,11 +196,12 @@ class Settings extends Strict implements ISettings
         }
     }
 
+
     private function parseMeta(array $meta)
     {
         $output = array();
 
-        foreach($meta as $key => $item)
+        foreach ($meta as $key => $item)
         {
             switch ($key)
             {
@@ -219,39 +222,38 @@ class Settings extends Strict implements ISettings
         return count($output) > 0 ? ','.implode(',', $output) : '';
     }
 
+
     private function formatDate($date)
     {
-        if($date instanceof \DateTime)
+        if ($date instanceof \DateTime)
         {
             return $date->getTimestamp();
         }
-        else if(is_string($date))
+        else if (is_string($date))
         {
             return strtotime($date);
         }
-        else if(is_int($date))
+        else if (is_int($date))
         {
             return $date;
         }
         return time();
     }
 
-    private $types = array('text','int','float','bool','json');
 
     private function checkType($type, $default = 'text')
     {
-        if(in_array((string) $type, $this->types))
+        if (in_array((string) $type, $this->types))
         {
             return $type;
         }
         return $default;
     }
 
-    private $flags = array('none','add','change','delete');
 
     private function checkFlag($flag, $default = 'none')
     {
-        if(in_array((string) $flag, $this->flags))
+        if (in_array((string) $flag, $this->flags))
         {
             return $flag;
         }
