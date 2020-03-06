@@ -1,12 +1,14 @@
 <?php
+
 namespace BulkGate\Extensions\Api;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 interface IResponse
 {
     /**

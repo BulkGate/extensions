@@ -1,11 +1,15 @@
 <?php
+
 namespace BulkGate\Extensions;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
  * @method Settings getSettings()
  * @method IO\IConnection getConnection()
  * @method Translator getTranslator()
@@ -14,7 +18,6 @@ use BulkGate;
  */
 abstract class DIContainer extends Strict
 {
-
     /** @var array */
     protected $services = array();
 
@@ -39,6 +42,7 @@ abstract class DIContainer extends Strict
 
     /**
      * @return Settings
+     * @throws ServiceNotFoundException
      */
     protected function createSettings()
     {
@@ -48,6 +52,7 @@ abstract class DIContainer extends Strict
 
     /**
      * @return IO\IConnection
+     * @throws ServiceNotFoundException
      */
     protected function createConnection()
     {
@@ -62,6 +67,7 @@ abstract class DIContainer extends Strict
 
     /**
      * @return Translator
+     * @throws ServiceNotFoundException
      */
     protected function createTranslator()
     {
@@ -71,6 +77,7 @@ abstract class DIContainer extends Strict
 
     /**
      * @return Synchronize
+     * @throws ServiceNotFoundException
      */
     protected function createSynchronize()
     {
@@ -80,6 +87,7 @@ abstract class DIContainer extends Strict
 
     /**
      * @return ProxyActions
+     * @throws ServiceNotFoundException
      */
     protected function createProxy()
     {
@@ -96,13 +104,13 @@ abstract class DIContainer extends Strict
     {
         $name = ucfirst($name);
 
-        if(isset($this->services[$name]))
+        if (isset($this->services[$name]))
         {
             return $this->services[$name];
         }
         else
         {
-            if(method_exists($this, 'create'.$name))
+            if (method_exists($this, 'create'.$name))
             {
                 return $this->services[$name] = call_user_func(array($this, 'create'.$name));
             }
@@ -122,7 +130,7 @@ abstract class DIContainer extends Strict
      */
     public function __call($name, array $args = array())
     {
-        if(preg_match("~^get(?<name>[A-Z][a-zA-Z0-9_]*)~", $name, $match))
+        if (preg_match("~^get(?<name>[A-Z][a-zA-Z0-9_]*)~", $name, $match))
         {
             return $this->getService($match['name']);
         }

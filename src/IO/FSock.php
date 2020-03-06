@@ -1,12 +1,14 @@
 <?php
+
 namespace BulkGate\Extensions\IO;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate\Extensions;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 class FSock extends Extensions\Strict implements IConnection
 {
     /** @var  string */
@@ -24,6 +26,7 @@ class FSock extends Extensions\Strict implements IConnection
     /** @var string */
     private $application_language;
 
+
     /**
      * Connection constructor.
      * @param $application_id
@@ -40,6 +43,7 @@ class FSock extends Extensions\Strict implements IConnection
         $this->application_product = $application_product;
         $this->application_language = $application_language;
     }
+
 
     /**
      * @param Request $request

@@ -1,12 +1,14 @@
 <?php
+
 namespace BulkGate\Extensions;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 class LocaleSimple extends Strict implements ILocale
 {
     /** @var string */
@@ -14,6 +16,7 @@ class LocaleSimple extends Strict implements ILocale
 
     /** @var string */
     private $time_format = "H:i:s";
+
 
     public function __construct($date_format = "d/m/Y", $time_format = "H:i:s")
     {
@@ -24,7 +27,7 @@ class LocaleSimple extends Strict implements ILocale
 
     public function price($price, $currency = null)
     {
-        if($currency === null)
+        if ($currency === null)
         {
             return $this->float($price);
         }

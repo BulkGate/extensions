@@ -1,10 +1,12 @@
 <?php
+
 namespace BulkGate\Extensions;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
 class Strict
 {
     /**
@@ -16,7 +18,7 @@ class Strict
     {
         $class = get_class($this);
 
-        if(property_exists($class, $name))
+        if (property_exists($class, $name))
         {
             return $this->$name;
         }
@@ -33,7 +35,7 @@ class Strict
     {
         $class = get_class($this);
 
-        if(property_exists($class, $name))
+        if (property_exists($class, $name))
         {
             $this->$name = $value;
         }
@@ -52,7 +54,7 @@ class Strict
     {
         $class = get_class($this);
 
-        if(property_exists($class, $name))
+        if (property_exists($class, $name))
         {
             return isset($this->$name);
         }

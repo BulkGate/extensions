@@ -1,12 +1,12 @@
 <?php
 
 namespace BulkGate\Extensions;
-use BulkGate\Extensions\IO\AuthenticateException;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
 class ProxyActions extends Strict
 {
     /** @var IO\IConnection */
@@ -27,6 +27,7 @@ class ProxyActions extends Strict
     /** @var ICustomers */
     private $customers;
 
+
     public function __construct(IO\IConnection $connection, IModule $module, Synchronize $synchronize, ISettings $settings, Translator $translator, ICustomers $customers)
     {
         $this->connection = $connection;
@@ -43,7 +44,7 @@ class ProxyActions extends Strict
 
         $login = (array) $response->get('::login');
 
-        if(isset($login['application_id']) && isset($login['application_token']))
+        if (isset($login['application_id']) && isset($login['application_token']))
         {
             $this->settings->set('static:application_id', $login['application_id'], array('type' => 'int'));
             $this->settings->set('static:application_token', $login['application_token']);
@@ -53,10 +54,12 @@ class ProxyActions extends Strict
         return $response;
     }
 
+
     public function logout()
     {
         $this->settings->delete('static:application_token');
     }
+
 
     public function register(array $data)
     {
@@ -64,7 +67,7 @@ class ProxyActions extends Strict
 
         $register = (array) $response->get('::register');
 
-        if(isset($register['application_id']) && isset($register['application_token']))
+        if (isset($register['application_id']) && isset($register['application_token']))
         {
             $this->settings->set('static:application_id', $register['application_id'], array('type' => 'int'));
             $this->settings->set('static:application_token', $register['application_token']);
@@ -73,6 +76,7 @@ class ProxyActions extends Strict
         }
         return $response;
     }
+
 
     public function authenticate()
     {
@@ -87,24 +91,26 @@ class ProxyActions extends Strict
         }
     }
 
+
     public function saveSettings(array $settings)
     {
-        if(isset($settings['delete_db']))
+        if (isset($settings['delete_db']))
         {
             $this->settings->set('main:delete_db', $settings['delete_db'], array('type' => 'int'));
         }
 
-        if(isset($settings['language']))
+        if (isset($settings['language']))
         {
             $this->translator->setLanguage($settings['language']);
         }
 
-        if(isset($settings['language_mutation']))
+        if (isset($settings['language_mutation']))
         {
             $this->settings->set('main:language_mutation', $settings['language_mutation'], array('type' => 'int'));
             $this->settings->set('static:synchronize', 0, array('type' => 'int'));
         }
     }
+
 
     public function saveCustomerNotifications(array $data)
     {
@@ -119,6 +125,7 @@ class ProxyActions extends Strict
         });
     }
 
+
     public function saveAdminNotifications(array $data)
     {
         $self = $this;
@@ -131,6 +138,7 @@ class ProxyActions extends Strict
             ));
         });
     }
+
 
     public function loadCustomersCount($application_id, $id, $type = 'load', array $data = array())
     {
@@ -158,6 +166,7 @@ class ProxyActions extends Strict
 
         return $response;
     }
+
 
     public function saveModuleCustomers($application_id, $campaign_id)
     {

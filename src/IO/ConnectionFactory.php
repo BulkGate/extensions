@@ -1,24 +1,30 @@
 <?php
+
 namespace BulkGate\Extensions\IO;
 
-use BulkGate;
-
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class ConnectionFactory extends BulkGate\Extensions\Strict
+
+use BulkGate;
+use BulkGate\Extensions\ISettings;
+use BulkGate\Extensions\Strict;
+
+class ConnectionFactory extends Strict
 {
-    /** @var BulkGate\Extensions\ISettings */
+    /** @var ISettings */
     private $settings;
 
     /** @var IConnection */
     private $io;
 
-    public function __construct(BulkGate\Extensions\ISettings $settings)
+
+    public function __construct(ISettings $settings)
     {
         $this->settings = $settings;
     }
+
 
     /**
      * @param string $url
@@ -27,9 +33,9 @@ class ConnectionFactory extends BulkGate\Extensions\Strict
      */
     public function create($url, $product)
     {
-        if($this->io === null)
+        if ($this->io === null)
         {
-            if(extension_loaded('curl'))
+            if (extension_loaded('curl'))
             {
                 $this->io = new cUrl($this->settings->load("static:application_id"), $this->settings->load("static:application_token"), $url, $product, $this->settings->load('main:language', 'en'));
             }

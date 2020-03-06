@@ -1,12 +1,14 @@
 <?php
+
 namespace BulkGate\Extensions\Hook;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate\Extensions\Database;
 
-/**
- * @author Lukáš Piják 2017 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 interface IExtension
 {
     /**

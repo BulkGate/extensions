@@ -1,10 +1,12 @@
 <?php
+
 namespace BulkGate\Extensions;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
 interface ICustomers
 {
     /**
@@ -12,6 +14,7 @@ interface ICustomers
      * @return array
      */
     public function loadCount(array $filter = array());
+
 
     /**
      * @param array $filter

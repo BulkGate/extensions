@@ -1,12 +1,14 @@
 <?php
+
 namespace BulkGate\Extensions;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate, NumberFormatter, IntlDateFormatter;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 class LocaleIntl extends Strict implements ILocale
 {
     /** @var NumberFormatter */
@@ -27,7 +29,7 @@ class LocaleIntl extends Strict implements ILocale
 
     public function __construct($locale, \DateTimeZone $timeZone = null)
     {
-        if(extension_loaded('intl'))
+        if (extension_loaded('intl'))
         {
             $this->number_formatter = new NumberFormatter($locale, NumberFormatter::DECIMAL);
             $this->currency_formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
@@ -55,12 +57,12 @@ class LocaleIntl extends Strict implements ILocale
 
     public function price($price, $currency = null)
     {
-        if($currency === null)
+        if ($currency === null)
         {
             return $this->float($price);
         }
 
-        if($p = $this->currency_formatter->formatCurrency($price, strtoupper($currency)))
+        if ($p = $this->currency_formatter->formatCurrency($price, strtoupper($currency)))
         {
             return $p;
         }

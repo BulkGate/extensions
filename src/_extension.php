@@ -1,10 +1,12 @@
 <?php
+
 namespace BulkGate\Extensions;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
 require_once __DIR__.'/exceptions.php';
 require_once __DIR__.'/IModule.php';
 require_once __DIR__.'/ICustomers.php';
@@ -58,7 +60,7 @@ require_once __DIR__.'/Api/IResponse.php';
 require_once __DIR__.'/Api/Response.php';
 require_once __DIR__.'/Api/Api.php';
 
-if(file_exists(__DIR__.'/Hook/IExtension.php'))
+if (file_exists(__DIR__.'/Hook/IExtension.php'))
 {
     require_once __DIR__.'/Hook/IExtension.php';
 }

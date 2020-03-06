@@ -1,13 +1,19 @@
 <?php
+
 namespace BulkGate\Extensions\Hook;
 
-use BulkGate;
-
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Hook extends BulkGate\Extensions\Strict
+
+use BulkGate;
+use BulkGate\Extensions\IO\IConnection;
+use BulkGate\Extensions\IO\Request;
+use BulkGate\Extensions\ISettings;
+use BulkGate\Extensions\Strict;
+
+class Hook extends Strict
 {
     /** @var string */
     private $url;
@@ -18,16 +24,17 @@ class Hook extends BulkGate\Extensions\Strict
     /** @var int */
     private $shop_id;
 
-    /** @var BulkGate\Extensions\IO\IConnection */
+    /** @var IConnection */
     private $connection;
 
-    /** @var BulkGate\Extensions\ISettings */
+    /** @var ISettings */
     private $settings;
 
     /** @var ILoad */
     private $load;
 
-    public function __construct($url, $language_iso, $shop_id, BulkGate\Extensions\IO\IConnection $connection, BulkGate\Extensions\ISettings $settings, ILoad $load)
+
+    public function __construct($url, $language_iso, $shop_id, IConnection $connection, ISettings $settings, ILoad $load)
     {
         $this->url = $url;
         $this->language_iso = $settings->load('main:language_mutation', false) ? (string) $language_iso : 'default';
@@ -37,16 +44,17 @@ class Hook extends BulkGate\Extensions\Strict
         $this->load = $load;
     }
 
+
     public function run($name, Variables $variables)
     {
         $customer = new Settings((array) $this->settings->load($this->getKey($name, 'customer'), array()));
         $admin = new Settings((array) $this->settings->load($this->getKey($name, 'admin'), array()));
 
-        if(count($customer->toArray()) > 0 || count($admin->toArray()) > 0)
+        if (count($customer->toArray()) > 0 || count($admin->toArray()) > 0)
         {
             $this->load->load($variables);
 
-            return $this->connection->run(new BulkGate\Extensions\IO\Request($this->url, array(
+            return $this->connection->run(new Request($this->url, array(
                 'customer_sms' => $customer->toArray(),
                 'admin_sms' => $admin->toArray(),
                 'variables' => $variables->toArray()
@@ -54,6 +62,7 @@ class Hook extends BulkGate\Extensions\Strict
         }
         return false;
     }
+
 
     private function getKey($name, $type)
     {

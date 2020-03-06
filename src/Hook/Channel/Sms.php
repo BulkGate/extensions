@@ -1,13 +1,17 @@
 <?php
+
 namespace BulkGate\Extensions\Hook\Channel;
 
-use BulkGate;
-
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Sms extends BulkGate\Extensions\Strict implements IChannel
+
+use BulkGate;
+use BulkGate\Extensions\Strict;
+use BulkGate\Extensions\StrictException;
+
+class Sms extends Strict implements IChannel
 {
     /** @var bool */
     private $active = false;
@@ -33,24 +37,27 @@ class Sms extends BulkGate\Extensions\Strict implements IChannel
     /** @var array */
     private $admins = array();
 
+
     public function __construct(array $data)
     {
-        foreach($data as $key => $value)
+        foreach ($data as $key => $value)
         {
             try
             {
                 $this->{$key} = $value;
             }
-            catch (BulkGate\Extensions\StrictException $e)
+            catch (StrictException $e)
             {
             }
         }
     }
 
+
     public function isActive()
     {
         return (bool) $this->active;
     }
+
 
     public function toArray()
     {

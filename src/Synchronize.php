@@ -1,13 +1,15 @@
 <?php
+
 namespace BulkGate\Extensions;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate\Extensions\IO\Response;
 use BulkGate\Extensions\IO\AuthenticateException;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 class Synchronize extends Strict
 {
     /** @var ISettings */
@@ -16,11 +18,13 @@ class Synchronize extends Strict
     /** @var IO\IConnection */
     private $connection;
 
+
     public function __construct(ISettings $settings, IO\IConnection $connection)
     {
         $this->settings = $settings;
         $this->connection = $connection;
     }
+
 
     public function run($url, $now = false)
     {
@@ -39,6 +43,7 @@ class Synchronize extends Strict
             $this->settings->delete('static:application_token');
         }
     }
+
 
     public function synchronize($callback)
     {

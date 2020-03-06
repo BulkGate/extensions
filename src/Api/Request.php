@@ -1,12 +1,14 @@
 <?php
-namespace BulkGate\Extensions\Api;
 
-use BulkGate\Extensions;
+namespace BulkGate\Extensions\Api;
 
 /**
  * @author Lukáš Piják 2018 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
+use BulkGate\Extensions;
+
 class Request extends \stdClass implements IRequest
 {
     /** @var array */
@@ -15,9 +17,10 @@ class Request extends \stdClass implements IRequest
     /** @var Extensions\Headers */
     private $headers;
 
+
     public function __construct(Extensions\Headers $headers)
     {
-        if(!isset($_SERVER['REQUEST_METHOD']) || (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) !== 'post'))
+        if (!isset($_SERVER['REQUEST_METHOD']) || (isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) !== 'post'))
         {
             throw new ConnectionException("Method Not Allowed", 405);
         }
@@ -28,9 +31,9 @@ class Request extends \stdClass implements IRequest
 
         $data = file_get_contents('php://input');
 
-        if(is_string($data))
+        if (is_string($data))
         {
-            if($content_type === 'application/json')
+            if ($content_type === 'application/json')
             {
                 try
                 {
@@ -41,7 +44,7 @@ class Request extends \stdClass implements IRequest
                     throw new ConnectionException('Bad Request', 400);
                 }
             }
-            elseif($content_type === 'application/zip')
+            else if ($content_type === 'application/zip')
             {
                 $this->data = Extensions\Json::decode(Extensions\Compress::decompress($data), Extensions\Json::FORCE_ARRAY);
             }
@@ -56,26 +59,32 @@ class Request extends \stdClass implements IRequest
         }
     }
 
+
     public function __get($name)
     {
-        if(isset($this->data[$name]))
+        if (isset($this->data[$name]))
         {
             return $this->data[$name];
         }
         return null;
     }
 
+
     public function __set($name, $value)
     {
         $this->data[$name] = $value;
     }
+
 
     public function __isset($name)
     {
         return isset($this->data[$name]);
     }
 
-    /** @return Extensions\Headers */
+
+    /**
+     * @return Extensions\Headers
+     */
     public function getHeaders()
     {
         return $this->headers;

@@ -1,12 +1,13 @@
 <?php
 namespace BulkGate\Extensions;
 
-use BulkGate\Extensions;
-
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
+use BulkGate\Extensions;
+
 abstract class Customers extends Extensions\Strict implements Extensions\ICustomers
 {
     /** @var Extensions\Database\IDatabase */
@@ -59,11 +60,11 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
 
         $filtered_count = $total = $this->getTotal();
 
-        if(count($filter) > 0)
+        if (count($filter) > 0)
         {
             list($customers, $filtered) = $this->filter($filter);
 
-            if($filtered)
+            if ($filtered)
             {
                 $filtered_count = $this->getFilteredTotal($customers);
             }
@@ -72,11 +73,12 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
         return array('total' => $total, 'count' => $filtered_count, 'limit' => $filtered_count !== 0 ? $this->loadCustomers((array) $customers, 10) : array());
     }
 
+
     public function load(array $filter = array())
     {
         $customers = array();
 
-        if(count($filter) > 0)
+        if (count($filter) > 0)
         {
             list($customers, $_) = $this->filter($filter);
         }
@@ -90,29 +92,29 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
 
         strlen($table) > 0 && $table = '`'.$this->db->table($table).'`.';
 
-        if(isset($filter['type']) && isset($filter['values']))
+        if (isset($filter['type']) && isset($filter['values']))
         {
             foreach ($filter['values'] as $value)
             {
-                if(in_array($filter['type'], array('enum', 'string', 'float'), true))
+                if (in_array($filter['type'], array('enum', 'string', 'float'), true))
                 {
-                    if($value[0] === 'prefix')
+                    if ($value[0] === 'prefix')
                     {
                         $sql[] = $this->db->prepare($table."`".$key_value."` LIKE %s", array($value[1].'%'));
                     }
-                    elseif($value[0] === 'sufix')
+                    else if ($value[0] === 'sufix')
                     {
                         $sql[] = $this->db->prepare($table."`".$key_value."` LIKE %s", array('%'.$value[1]));
                     }
-                    elseif($value[0] === 'substring')
+                    else if ($value[0] === 'substring')
                     {
                         $sql[] = $this->db->prepare($table."`".$key_value."` LIKE %s", array('%'.$value[1].'%'));
                     }
-                    elseif($value[0] === 'empty')
+                    else if ($value[0] === 'empty')
                     {
                         $sql[] = "`".$key_value."` IS NULL OR TRIM(`".$key_value."`) = ''";
                     }
-                    elseif($value[0] === 'filled')
+                    else if ($value[0] === 'filled')
                     {
                         $sql[] = "`".$key_value."` IS NOT NULL AND (`".$key_value."`) != ''";
                     }
@@ -121,7 +123,7 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
                         $sql[] = $this->db->prepare($table."`".$key_value."` ".$this->getRelation($value[0])." %s", array($value[1]));
                     }
                 }
-                elseif($filter['type'] === "date-range")
+                else if ($filter['type'] === "date-range")
                 {
                     $sql[] = $this->db->prepare($table."`".$key_value."` BETWEEN %s AND %s", array($value[1], $value[2]));
                 }
@@ -147,9 +149,9 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
     {
         $output = array();
 
-        if($result->getNumRows() > 0)
+        if ($result->getNumRows() > 0)
         {
-            foreach($result as $row)
+            foreach ($result as $row)
             {
                 $output[] = (int) $row->{$this->table_user_key};
             }
@@ -159,6 +161,6 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
             $this->empty = true;
         }
 
-        return $this->empty ? array() : count($customers) > 0 ? array_intersect($customers, $output) : $output;
+        return $this->empty ? array() : (count($customers) > 0 ? array_intersect($customers, $output) : $output);
     }
 }

@@ -1,10 +1,12 @@
 <?php
+
 namespace BulkGate\Extensions\Database;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
 interface IDatabase
 {
     /**
@@ -13,6 +15,7 @@ interface IDatabase
      */
     public function execute($sql);
 
+
     /**
      * @param string $sql
      * @param array $params
@@ -20,10 +23,12 @@ interface IDatabase
      */
     public function prepare($sql, array $params = array());
 
+
     /**
      * @return mixed
      */
     public function lastId();
+
 
     /**
      * @param string $string
@@ -31,15 +36,18 @@ interface IDatabase
      */
     public function escape($string);
 
+
     /**
      * @return string
      */
     public function prefix();
 
+
     /**
      * @return array
      */
     public function getSqlList();
+
 
     /**
      * @param string $table

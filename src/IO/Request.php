@@ -1,16 +1,23 @@
 <?php
+
 namespace BulkGate\Extensions\IO;
 
-use BulkGate;
-
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
+use BulkGate;
+use BulkGate\Extensions\Compress;
+use BulkGate\Extensions\Json;
+use BulkGate\Extensions\JsonException;
+
 class Request extends BulkGate\Extensions\Strict
 {
+    /** @var string */
     const CONTENT_TYPE_JSON = 'application/json';
 
+    /** @var string */
     const CONTENT_TYPE_ZIP = 'application/zip';
 
     /** @var string */
@@ -25,12 +32,14 @@ class Request extends BulkGate\Extensions\Strict
     /** @var int */
     private $timeout;
 
+
     public function __construct($url, array $data = array(), $compress = false, $timeout = 20)
     {
         $this->setUrl($url);
         $this->setData($data, $compress);
         $this->timeout = max(3 /** min timeout */, (int) $timeout);
     }
+
 
     public function setData(array $data = array(), $compress = false)
     {
@@ -40,6 +49,7 @@ class Request extends BulkGate\Extensions\Strict
         return $this;
     }
 
+
     public function setUrl($url)
     {
         $this->url = (string) $url;
@@ -47,34 +57,38 @@ class Request extends BulkGate\Extensions\Strict
         return $this;
     }
 
+
     public function getData()
     {
         try
         {
-            if($this->content_type === self::CONTENT_TYPE_ZIP)
+            if ($this->content_type === self::CONTENT_TYPE_ZIP)
             {
-                return BulkGate\Extensions\Compress::compress(BulkGate\Extensions\Json::encode($this->data));
+                return Compress::compress(Json::encode($this->data));
             }
             else
             {
-                return BulkGate\Extensions\Json::encode($this->data);
+                return Json::encode($this->data);
             }
         }
-        catch (BulkGate\Extensions\JsonException $e)
+        catch (JsonException $e)
         {
             throw new InvalidRequestException;
         }
     }
+
 
     public function getUrl()
     {
         return (string) $this->url;
     }
 
+
     public function getContentType()
     {
         return (string) $this->content_type;
     }
+
 
     public function getTimeout()
     {

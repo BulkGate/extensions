@@ -1,10 +1,12 @@
 <?php
+
 namespace BulkGate\Extensions\IO;
 
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
+
 interface IConnection
 {
     /**

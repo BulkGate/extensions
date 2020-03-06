@@ -1,27 +1,30 @@
 <?php
+
 namespace BulkGate\Extensions\Hook;
 
-use BulkGate;
-
 /**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
  * @link https://www.bulkgate.com/
  */
-class Settings extends BulkGate\Extensions\Iterator
+
+use BulkGate;
+use BulkGate\Extensions\Iterator;
+
+class Settings extends Iterator
 {
     public function __construct(array $data)
     {
         $settings = array();
 
-        foreach($data as $type => $channel)
+        foreach ($data as $type => $channel)
         {
             switch ($type)
             {
                 case 'sms':
-                    $settings[$type] = new BulkGate\Extensions\Hook\Channel\Sms((array) $channel);
+                    $settings[$type] = new Channel\Sms((array) $channel);
                 break;
                 default:
-                    $settings[$type] = new BulkGate\Extensions\Hook\Channel\DefaultChannel((array) $channel);
+                    $settings[$type] = new Channel\DefaultChannel((array) $channel);
                 break;
             }
         }
@@ -29,14 +32,15 @@ class Settings extends BulkGate\Extensions\Iterator
         parent::__construct($settings);
     }
 
+
     public function toArray()
     {
         $output = array();
 
-        /** @var BulkGate\Extensions\Hook\Channel\IChannel $item */
-        foreach($this->array as $key => $item)
+        /** @var Channel\IChannel $item */
+        foreach ($this->array as $key => $item)
         {
-            if($item->isActive())
+            if ($item->isActive())
             {
                 $output[$key] = $item->toArray();
             }

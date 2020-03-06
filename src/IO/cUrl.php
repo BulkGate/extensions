@@ -1,12 +1,14 @@
 <?php
+
 namespace BulkGate\Extensions\IO;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
 class cUrl extends BulkGate\Extensions\Strict implements IConnection
 {
     /** @var  int */
@@ -24,6 +26,7 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
     /** @var string */
     private $application_language;
 
+
     /**
      * Connection constructor.
      * @param $application_id
@@ -40,6 +43,7 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
         $this->application_product = $application_product;
         $this->application_language = $application_language;
     }
+
 
     /**
      * @param Request $request
@@ -71,15 +75,12 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
             ),
         ));
 
-        /*curl_setopt($curl, CURLOPT_TIMEOUT_MS, 100);
-        curl_setopt($curl, CURLOPT_NOSIGNAL, 1);*/
-
         $response = curl_exec($curl);
         $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $header = new HttpHeaders(substr($response, 0, $header_size));
         $json = substr($response, $header_size);
 
-        if($json)
+        if ($json)
         {
             curl_close($curl);
             return new Response($json, $header->getContentType());
@@ -87,6 +88,7 @@ class cUrl extends BulkGate\Extensions\Strict implements IConnection
 
         $error = curl_error($curl);
         curl_close($curl);
+
         return new Response(array('data' => array(), 'error' => array('Server ('.$request->getUrl().') is unavailable. Try contact your hosting provider. Reason: '. $error)));
     }
 }
