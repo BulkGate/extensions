@@ -1,16 +1,26 @@
 <?php
+
 namespace BulkGate\Extensions\Api;
+
+/**
+ * @author Lukáš Piják 2020 TOPefekt s.r.o.
+ * @link https://www.bulkgate.com/
+ */
 
 use BulkGate\Extensions;
 
-/**
- * @author Lukáš Piják 2018 TOPefekt s.r.o.
- * @link https://www.bulkgate.com/
- */
-class ConnectionException extends Extensions\Exception {}
+class ConnectionException extends Extensions\Exception
+{
+}
 
-class InvalidRequestException extends ConnectionException {}
+class InvalidRequestException extends ConnectionException
+{
+}
 
-class UnknownActionException extends ConnectionException {}
+class UnknownActionException extends ConnectionException
+{
+}
 
-class MethodNotAllowedException extends ConnectionException {}
+class MethodNotAllowedException extends ConnectionException
+{
+}
