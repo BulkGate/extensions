@@ -53,7 +53,7 @@ class Settings extends Strict implements ISettings
         {
             $result = $this->db->execute(
                 $this->db->prepare(
-                    'SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `synchronize_flag` != "delete" ORDER BY `order`',
+                    'SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` = %s AND `synchronize_flag` != \'delete\' ORDER BY `order`',
                     array($scope)
                 )
             );
@@ -141,7 +141,7 @@ class Settings extends Strict implements ISettings
     {
         if ($settings_key === null)
         {
-            $this->db->execute('DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `synchronize_flag` = "delete"');
+            $this->db->execute('DELETE FROM `'.$this->db->table('bulkgate_module').'` WHERE `synchronize_flag` = \'delete\'');
         }
         else
         {
@@ -159,7 +159,7 @@ class Settings extends Strict implements ISettings
     {
         $output = array();
 
-        $result = $this->db->execute('SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` != "static"')->getRows();
+        $result = $this->db->execute('SELECT * FROM `'.$this->db->table('bulkgate_module').'` WHERE `scope` != \'static\'')->getRows();
 
         foreach ($result as $row)
         {
