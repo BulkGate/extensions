@@ -161,6 +161,6 @@ abstract class Customers extends Extensions\Strict implements Extensions\ICustom
             $this->empty = true;
         }
 
-        return $this->empty ? array() : (count($customers) > 0 ? array_intersect($customers, $output) : $output);
+        return ($this->empty ? array() : (count($customers) > 0 ? array_intersect($customers, $output) : $output));
     }
 }
